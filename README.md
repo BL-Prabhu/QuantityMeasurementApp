@@ -1,7 +1,11 @@
-# Quantity Measurement - Use Case 4
+# Quantity Measurement - Use Case 5
 
 ## 📌 Objective
-Support multiple units and compare them using a common base (Feet).
+Provide a complete conversion system with:
+- Multiple units
+- Validation
+- Overloaded conversion methods
+- Precision handling
 
 ---
 
@@ -13,16 +17,7 @@ Support multiple units and compare them using a common base (Feet).
 
 ---
 
-## ⚙️ Conversion Logic
-| Unit | Conversion |
-|------|------------|
-| 1 Yard | 3 Feet |
-| 1 Feet | 12 Inches |
-| 1 CM | 0.0328084 Feet |
+## ⚙️ Features
 
-All values are internally converted to **Feet**.
-
----
-
-## 🎯 Key Feature
-- Floating point precision handled using:
+### ✔️ Conversion APIs
+1. Primitive Conversion:
