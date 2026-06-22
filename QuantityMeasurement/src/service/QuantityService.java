@@ -5,14 +5,9 @@ import model.QuantityLength;
 
 public interface QuantityService {
 
-
-    QuantityLength add(QuantityLength first, QuantityLength second);
-
-    QuantityLength addWithTargetUnit(
+    QuantityLength add(
             QuantityLength first,
             QuantityLength second,
             LengthUnit targetUnit
     );
-
-
 }
