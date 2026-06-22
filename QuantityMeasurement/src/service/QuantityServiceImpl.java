@@ -1,33 +1,48 @@
 package service;
 
-
 import model.LengthUnit;
 import model.QuantityLength;
 
 public class QuantityServiceImpl implements QuantityService {
 
-    @Override
-    public double convert(double value, LengthUnit from, LengthUnit to) {
-        return QuantityLength.convert(value, from, to);
-    }
 
     @Override
-    public QuantityLength convert(QuantityLength quantity, LengthUnit to) {
+    public QuantityLength add(QuantityLength first, QuantityLength second) {
 
-        if (quantity == null) {
-            throw new IllegalArgumentException("Quantity cannot be null");
+        if (first == null || second == null) {
+            throw new IllegalArgumentException("Operands cannot be null");
         }
 
-        return quantity.convertTo(to);
+        double totalFeet = first.toFeet() + second.toFeet();
+
+        double resultValue =
+                totalFeet / first.getUnit().getConversionFactor();
+
+        return new QuantityLength(resultValue, first.getUnit());
     }
 
     @Override
-    public boolean compare(QuantityLength q1, QuantityLength q2) {
+    public QuantityLength addWithTargetUnit(
+            QuantityLength first,
+            QuantityLength second,
+            LengthUnit targetUnit
+    ) {
 
-        if (q1 == null || q2 == null) {
-            return false;
+        if (first == null || second == null) {
+            throw new IllegalArgumentException("Operands cannot be null");
         }
 
-        return q1.isEqual(q2);
+        if (targetUnit == null) {
+            throw new IllegalArgumentException("Target unit cannot be null");
+        }
+
+        double totalFeet = first.toFeet() + second.toFeet();
+
+        double result =
+                totalFeet / targetUnit.getConversionFactor();
+
+        return new QuantityLength(result, targetUnit);
     }
+
+
 }
