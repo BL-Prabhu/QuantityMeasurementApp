@@ -1,6 +1,4 @@
 package controller;
-
-
 import model.LengthUnit;
 import model.QuantityLength;
 import service.QuantityService;
@@ -12,18 +10,25 @@ public class QuantityController {
 
     public void run() {
 
-        QuantityLength yard = new QuantityLength(1.0, LengthUnit.YARDS);
-        QuantityLength feet = new QuantityLength(3.0, LengthUnit.FEET);
+        // Method 1 (Primitive Conversion)
+        System.out.println("1 ft to inch = " +
+                service.convert(1.0, LengthUnit.FEET, LengthUnit.INCHES));
 
-        System.out.println("1 Yard == 3 Feet : " + service.compare(yard, feet));
+        System.out.println("3 yard to feet = " +
+                service.convert(3.0, LengthUnit.YARDS, LengthUnit.FEET));
 
-        QuantityLength inches = new QuantityLength(36.0, LengthUnit.INCHES);
-        System.out.println("1 Yard == 36 Inches : " + service.compare(yard, inches));
+        // Method 2 (Object Conversion)
+        QuantityLength length = new QuantityLength(36, LengthUnit.INCHES);
 
-        QuantityLength cm = new QuantityLength(1.0, LengthUnit.CENTIMETERS);
-        QuantityLength inch = new QuantityLength(0.393701, LengthUnit.INCHES);
+        System.out.println("36 inches to yard = " +
+                service.convert(length, LengthUnit.YARDS));
 
-        System.out.println("1 CM == 0.393701 Inches : " + service.compare(cm, inch));
+        // Equality
+        QuantityLength yard = new QuantityLength(1, LengthUnit.YARDS);
+        QuantityLength feet = new QuantityLength(3, LengthUnit.FEET);
+
+        System.out.println("1 yard == 3 feet ? " +
+                service.compare(yard, feet));
     }
 
     public static void main(String[] args) {
