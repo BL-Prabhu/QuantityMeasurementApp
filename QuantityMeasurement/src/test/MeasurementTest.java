@@ -1,6 +1,11 @@
 package test;
 
+import model.Feet;
+import model.Inches;
+import service.MeasurementService;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MeasurementTest {
 
