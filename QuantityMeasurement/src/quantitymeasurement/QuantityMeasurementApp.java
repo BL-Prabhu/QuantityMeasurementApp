@@ -1,4 +1,4 @@
-package app;
+package quantitymeasurement;
 
 import controller.MeasurementController;
 
