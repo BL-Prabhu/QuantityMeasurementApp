@@ -10,24 +10,23 @@ public class QuantityController {
 
     private final QuantityService service = new QuantityServiceImpl();
 
-    public void runDemo() {
+    public void run() {
 
-        QuantityLength feet = new QuantityLength(1.0, LengthUnit.FEET);
-        QuantityLength inches = new QuantityLength(12.0, LengthUnit.INCH);
+        QuantityLength yard = new QuantityLength(1.0, LengthUnit.YARDS);
+        QuantityLength feet = new QuantityLength(3.0, LengthUnit.FEET);
 
-        boolean result1 = service.areEqual(feet, inches);
+        System.out.println("1 Yard == 3 Feet : " + service.compare(yard, feet));
 
-        System.out.println("1 ft == 12 inch ? " + result1);
+        QuantityLength inches = new QuantityLength(36.0, LengthUnit.INCHES);
+        System.out.println("1 Yard == 36 Inches : " + service.compare(yard, inches));
 
-        QuantityLength inch1 = new QuantityLength(1.0, LengthUnit.INCH);
-        QuantityLength inch2 = new QuantityLength(1.0, LengthUnit.INCH);
+        QuantityLength cm = new QuantityLength(1.0, LengthUnit.CENTIMETERS);
+        QuantityLength inch = new QuantityLength(0.393701, LengthUnit.INCHES);
 
-        boolean result2 = service.areEqual(inch1, inch2);
-
-        System.out.println("1 inch == 1 inch ? " + result2);
+        System.out.println("1 CM == 0.393701 Inches : " + service.compare(cm, inch));
     }
 
     public static void main(String[] args) {
-        new QuantityController().runDemo();
+        new QuantityController().run();
     }
 }
