@@ -5,5 +5,5 @@ import model.QuantityLength;
 
 public interface QuantityService {
 
-    boolean areEqual(QuantityLength q1, QuantityLength q2);
+    boolean compare(QuantityLength q1, QuantityLength q2);
 }
