@@ -1,44 +1,32 @@
 package controller;
 
 import model.LengthUnit;
-import model.QuantityLength;
+import model.Quantity;
 import service.QuantityService;
 import service.QuantityServiceImpl;
 
 public class QuantityController {
 
-    private final QuantityService service = new QuantityServiceImpl();
-
-    public QuantityLength addLengths(
-            double value1, LengthUnit unit1,
-            double value2, LengthUnit unit2,
-            LengthUnit targetUnit
-    ) {
-
-        QuantityLength q1 = new QuantityLength(value1, unit1);
-        QuantityLength q2 = new QuantityLength(value2, unit2);
-
-        return service.add(q1, q2, targetUnit);
-    }
-
     public static void main(String[] args) {
 
-        QuantityController controller = new QuantityController();
+        QuantityService service = new QuantityServiceImpl();
 
-        System.out.println(
-                controller.addLengths(
-                        1, LengthUnit.FEET,
-                        12, LengthUnit.INCHES,
-                        LengthUnit.FEET
-                )
-        );
+        // Convert
+        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
+        Quantity converted = service.convert(q1, LengthUnit.INCHES);
 
-        System.out.println(
-                controller.addLengths(
-                        1, LengthUnit.FEET,
-                        12, LengthUnit.INCHES,
-                        LengthUnit.YARDS
-                )
-        );
+        System.out.println("Convert 1 FEET to INCHES: " + converted.getValue());
+
+        // Add
+        Quantity q2 = new Quantity(12.0, LengthUnit.INCHES);
+        Quantity result = service.add(q1, q2, LengthUnit.FEET);
+
+        System.out.println("Add 1 FEET + 12 INCHES in FEET: " + result.getValue());
+
+        // Equality
+        Quantity q3 = new Quantity(36.0, LengthUnit.INCHES);
+        Quantity q4 = new Quantity(1.0, LengthUnit.YARD);
+
+        System.out.println("36 INCHES == 1 YARD: " + q3.equals(q4));
     }
 }

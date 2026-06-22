@@ -1,6 +1,8 @@
 package model;
 
-public class QuantityLength {
+import java.util.Objects;
+
+public final class QuantityLength {
 
     private static final double EPSILON = 0.0001;
 
@@ -13,12 +15,8 @@ public class QuantityLength {
             throw new IllegalArgumentException("Value must be finite");
         }
 
-        if (unit == null) {
-            throw new IllegalArgumentException("Unit cannot be null");
-        }
-
+        this.unit = Objects.requireNonNull(unit, "Unit cannot be null");
         this.value = value;
-        this.unit = unit;
     }
 
     public double getValue() {
@@ -29,22 +27,24 @@ public class QuantityLength {
         return unit;
     }
 
+    // Convert current value to base unit (Feet)
     public double toFeet() {
         return value * unit.getConversionFactor();
     }
 
+    // Convert to another unit
     public QuantityLength convertTo(LengthUnit targetUnit) {
 
-        if (targetUnit == null) {
-            throw new IllegalArgumentException("Target unit cannot be null");
-        }
+        Objects.requireNonNull(targetUnit, "Target unit cannot be null");
 
-        double converted =
-                this.toFeet() / targetUnit.getConversionFactor();
+        double baseValue = this.toFeet();
+        double convertedValue =
+                baseValue / targetUnit.getConversionFactor();
 
-        return new QuantityLength(converted, targetUnit);
+        return new QuantityLength(convertedValue, targetUnit);
     }
 
+    // Equality check (based on base unit)
     @Override
     public boolean equals(Object obj) {
 
@@ -55,6 +55,12 @@ public class QuantityLength {
         QuantityLength other = (QuantityLength) obj;
 
         return Math.abs(this.toFeet() - other.toFeet()) < EPSILON;
+    }
+
+    // MUST override when equals is overridden
+    @Override
+    public int hashCode() {
+        return Double.hashCode(toFeet());
     }
 
     @Override

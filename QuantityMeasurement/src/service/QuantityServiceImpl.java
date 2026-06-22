@@ -1,30 +1,33 @@
 package service;
 
 import model.LengthUnit;
-import model.QuantityLength;
+import model.Quantity;
 
 public class QuantityServiceImpl implements QuantityService {
 
     @Override
-    public QuantityLength add(
-            QuantityLength first,
-            QuantityLength second,
-            LengthUnit targetUnit
-    ) {
+    public Quantity convert(Quantity quantity, LengthUnit targetUnit) {
 
-        if (first == null || second == null) {
-            throw new IllegalArgumentException("Operands cannot be null");
+        if (quantity == null || targetUnit == null) {
+            throw new IllegalArgumentException("Invalid input");
         }
 
-        if (targetUnit == null) {
-            throw new IllegalArgumentException("Target unit cannot be null");
+        double base = quantity.toBase();
+        double result = targetUnit.fromBase(base);
+
+        return new Quantity(result, targetUnit);
+    }
+
+    @Override
+    public Quantity add(Quantity q1, Quantity q2, LengthUnit targetUnit) {
+
+        if (q1 == null || q2 == null || targetUnit == null) {
+            throw new IllegalArgumentException("Invalid input");
         }
 
-        double totalFeet = first.toFeet() + second.toFeet();
+        double totalBase = q1.toBase() + q2.toBase();
+        double result = targetUnit.fromBase(totalBase);
 
-        double result =
-                totalFeet / targetUnit.getConversionFactor();
-
-        return new QuantityLength(result, targetUnit);
+        return new Quantity(result, targetUnit);
     }
 }
