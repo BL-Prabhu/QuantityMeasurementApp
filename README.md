@@ -1,49 +1,52 @@
-# UC1: Quantity Measurement Equality (Feet)
+# UC2: Quantity Measurement Equality (Feet & Inches)
 
 ## 📌 Overview
 
-This use case checks whether two measurements in feet are equal using object-oriented design principles.
+This use case checks equality of measurements for both Feet and Inches using object-oriented principles.
 
 ## 🎯 Goal
 
-Compare two `Feet` objects and determine if they represent the same value.
+Compare two measurements of the same unit and determine if they are equal.
 
 ## 🧠 Concepts Used
 
 * Object-Oriented Design
-* Immutable Objects
+* Immutable Classes
 * equals() and hashCode()
-* Double comparison using Double.compare()
-* Layered Architecture (Model-Service-Controller)
+* Double.compare() for precision
+* Layered Architecture
 * Unit Testing (JUnit)
 
-## 📁 Project Structure
+## 📁 Structure
 
-* model → Represents data (Feet)
-* service → Business logic
+* model → Feet, Inches classes
+* service → Comparison logic
 * controller → Handles flow
 * test → Unit tests
-* app → Main entry point
+* app → Entry point
 
 ## ⚙️ Flow
 
-1. User provides two values
-2. Controller creates Feet objects
-3. Service compares using equals()
+1. User inputs values
+2. Controller creates objects
+3. Service compares values
 4. Result is printed
 
 ## 📊 Sample Output
+
+Input: 1.0 inch and 1.0 inch
+Output: Equal (true)
 
 Input: 1.0 ft and 1.0 ft
 Output: Equal (true)
 
 ## 🚀 Benefits
 
-* Clean separation of concerns
-* Reusable business logic
-* Easy to test
-* Follows industry standards
+* Clean separation of logic
+* Reusable components
+* Easy testing
+* Industry-standard design
 
 ## 🔥 Conclusion
 
-This use case demonstrates how basic equality logic can be structured into a scalable and maintainable architecture.
+This use case demonstrates how multiple measurement types can be handled cleanly using proper architecture and equality logic.

@@ -8,6 +8,9 @@ public class QuantityMeasurementApp {
 
         MeasurementController controller = new MeasurementController();
 
-        controller.checkEquality(1.0, 1.0);
+        controller.compareInches(1.0, 1.0);
+        System.out.println();
+
+        controller.compareFeet(1.0, 1.0);
     }
 }
