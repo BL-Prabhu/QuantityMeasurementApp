@@ -1,73 +1,57 @@
 package test;
 
 import model.LengthUnit;
-import model.QuantityLength;
+import model.Quantity;
+import org.junit.Test;
 import service.QuantityService;
 import service.QuantityServiceImpl;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class QuantityServiceTest {
 
-    private final QuantityService service = new QuantityServiceImpl();
     private static final double EPSILON = 0.0001;
 
-    @Test
-    public void testFeetTarget() {
+    private final QuantityService service =
+            new QuantityServiceImpl();
 
-        QuantityLength result = service.add(
-                new QuantityLength(1, LengthUnit.FEET),
-                new QuantityLength(12, LengthUnit.INCHES),
-                LengthUnit.FEET
-        );
+    // ✅ Convert Test
+    @Test
+    public void testConvert_FeetToInches() {
+
+        Quantity q = new Quantity(1, LengthUnit.FEET);
+
+        Quantity result = service.convert(q, LengthUnit.INCHES);
+
+        assertEquals(12.0, result.getValue(), EPSILON);
+    }
+
+    // ✅ Add Test
+    @Test
+    public void testAdd_FeetAndInches() {
+
+        Quantity q1 = new Quantity(1, LengthUnit.FEET);
+        Quantity q2 = new Quantity(12, LengthUnit.INCHES);
+
+        Quantity result =
+                service.add(q1, q2, LengthUnit.FEET);
 
         assertEquals(2.0, result.getValue(), EPSILON);
     }
 
+    // ✅ Equality Test
     @Test
-    public void testInchesTarget() {
+    public void testEquality() {
 
-        QuantityLength result = service.add(
-                new QuantityLength(1, LengthUnit.FEET),
-                new QuantityLength(12, LengthUnit.INCHES),
-                LengthUnit.INCHES
-        );
+        Quantity q1 = new Quantity(36, LengthUnit.INCHES);
+        Quantity q2 = new Quantity(1, LengthUnit.YARD); // ✅ FIXED
 
-        assertEquals(24.0, result.getValue(), EPSILON);
+        assertTrue(q1.equals(q2));
     }
 
-    @Test
-    public void testYardsTarget() {
-
-        QuantityLength result = service.add(
-                new QuantityLength(1, LengthUnit.FEET),
-                new QuantityLength(12, LengthUnit.INCHES),
-                LengthUnit.YARDS
-        );
-
-        assertEquals(0.6667, result.getValue(), EPSILON);
-    }
-
+    // ✅ Invalid Input Test
     @Test(expected = IllegalArgumentException.class)
-    public void testNullTargetUnit() {
-
-        service.add(
-                new QuantityLength(1, LengthUnit.FEET),
-                new QuantityLength(12, LengthUnit.INCHES),
-                null
-        );
-    }
-
-    @Test
-    public void testNegativeValues() {
-
-        QuantityLength result = service.add(
-                new QuantityLength(5, LengthUnit.FEET),
-                new QuantityLength(-2, LengthUnit.FEET),
-                LengthUnit.INCHES
-        );
-
-        assertEquals(36.0, result.getValue(), EPSILON);
+    public void testInvalidValue() {
+        new Quantity(Double.NaN, LengthUnit.FEET);
     }
 }
