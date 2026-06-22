@@ -4,6 +4,7 @@ public class QuantityLength {
 
     private final double value;
     private final LengthUnit unit;
+    private static final double EPSILON = 0.0001;
 
     public QuantityLength(double value, LengthUnit unit) {
         if (unit == null) {
@@ -14,7 +15,7 @@ public class QuantityLength {
     }
 
     public double toFeet() {
-        return value * unit.getConversionFactor();
+        return unit.toFeet(value);
     }
 
     public double getValue() {
@@ -25,14 +26,8 @@ public class QuantityLength {
         return unit;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        QuantityLength other = (QuantityLength) obj;
-
-        return Double.compare(this.toFeet(), other.toFeet()) == 0;
+    public boolean isEqual(QuantityLength other) {
+        return Math.abs(this.toFeet() - other.toFeet()) < EPSILON;
     }
 
     @Override

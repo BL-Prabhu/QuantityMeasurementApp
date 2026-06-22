@@ -1,20 +1,28 @@
-# Quantity Measurement - Use Case 3
+# Quantity Measurement - Use Case 4
 
 ## 📌 Objective
-Compare two length quantities with different units (Feet, Inch) by converting them into a common base unit.
+Support multiple units and compare them using a common base (Feet).
 
 ---
 
 ## 📐 Supported Units
 - FEET
-- INCH
+- INCHES
+- YARDS
+- CENTIMETERS
 
 ---
 
 ## ⚙️ Conversion Logic
-- 1 FEET = 12 INCH
-- Internally, all values are converted to FEET before comparison.
+| Unit | Conversion |
+|------|------------|
+| 1 Yard | 3 Feet |
+| 1 Feet | 12 Inches |
+| 1 CM | 0.0328084 Feet |
+
+All values are internally converted to **Feet**.
 
 ---
 
-## 🏗️ Project Structure
+## 🎯 Key Feature
+- Floating point precision handled using:
