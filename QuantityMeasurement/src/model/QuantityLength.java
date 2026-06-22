@@ -2,7 +2,6 @@ package model;
 
 public class QuantityLength {
 
-
     private static final double EPSILON = 0.0001;
 
     private final double value;
@@ -40,11 +39,10 @@ public class QuantityLength {
             throw new IllegalArgumentException("Target unit cannot be null");
         }
 
-        double valueInFeet = toFeet();
-        double convertedValue =
-                valueInFeet / targetUnit.getConversionFactor();
+        double converted =
+                this.toFeet() / targetUnit.getConversionFactor();
 
-        return new QuantityLength(convertedValue, targetUnit);
+        return new QuantityLength(converted, targetUnit);
     }
 
     @Override
@@ -52,7 +50,7 @@ public class QuantityLength {
 
         if (this == obj) return true;
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (!(obj instanceof QuantityLength)) return false;
 
         QuantityLength other = (QuantityLength) obj;
 
@@ -63,6 +61,4 @@ public class QuantityLength {
     public String toString() {
         return "Quantity(" + value + ", " + unit + ")";
     }
-
-
 }
