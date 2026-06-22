@@ -1,4 +1,5 @@
 package controller;
+
 import model.LengthUnit;
 import model.QuantityLength;
 import service.QuantityService;
@@ -6,32 +7,46 @@ import service.QuantityServiceImpl;
 
 public class QuantityController {
 
+
     private final QuantityService service = new QuantityServiceImpl();
 
-    public void run() {
+    public QuantityLength addLengths(
+            double value1, LengthUnit unit1,
+            double value2, LengthUnit unit2
+    ) {
+        QuantityLength q1 = new QuantityLength(value1, unit1);
+        QuantityLength q2 = new QuantityLength(value2, unit2);
 
-        // Method 1 (Primitive Conversion)
-        System.out.println("1 ft to inch = " +
-                service.convert(1.0, LengthUnit.FEET, LengthUnit.INCHES));
+        return service.add(q1, q2);
+    }
 
-        System.out.println("3 yard to feet = " +
-                service.convert(3.0, LengthUnit.YARDS, LengthUnit.FEET));
+    public QuantityLength addLengthsWithTarget(
+            double value1, LengthUnit unit1,
+            double value2, LengthUnit unit2,
+            LengthUnit targetUnit
+    ) {
+        QuantityLength q1 = new QuantityLength(value1, unit1);
+        QuantityLength q2 = new QuantityLength(value2, unit2);
 
-        // Method 2 (Object Conversion)
-        QuantityLength length = new QuantityLength(36, LengthUnit.INCHES);
-
-        System.out.println("36 inches to yard = " +
-                service.convert(length, LengthUnit.YARDS));
-
-        // Equality
-        QuantityLength yard = new QuantityLength(1, LengthUnit.YARDS);
-        QuantityLength feet = new QuantityLength(3, LengthUnit.FEET);
-
-        System.out.println("1 yard == 3 feet ? " +
-                service.compare(yard, feet));
+        return service.addWithTargetUnit(q1, q2, targetUnit);
     }
 
     public static void main(String[] args) {
-        new QuantityController().run();
+
+        QuantityController controller = new QuantityController();
+
+        System.out.println(
+                controller.addLengths(1, LengthUnit.FEET, 12, LengthUnit.INCHES)
+        );
+
+        System.out.println(
+                controller.addLengthsWithTarget(
+                        1, LengthUnit.YARDS,
+                        3, LengthUnit.FEET,
+                        LengthUnit.YARDS
+                )
+        );
     }
+
+
 }
