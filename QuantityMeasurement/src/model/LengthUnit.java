@@ -2,7 +2,6 @@ package model;
 
 public enum LengthUnit {
 
-
     FEET(1.0),
     INCHES(1.0 / 12.0),
     YARDS(3.0),
@@ -17,6 +16,4 @@ public enum LengthUnit {
     public double getConversionFactor() {
         return conversionFactor;
     }
-
-
 }
