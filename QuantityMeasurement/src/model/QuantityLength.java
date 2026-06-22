@@ -2,13 +2,17 @@ package model;
 
 public class QuantityLength {
 
+
     private static final double EPSILON = 0.0001;
 
     private final double value;
     private final LengthUnit unit;
 
     public QuantityLength(double value, LengthUnit unit) {
-        validate(value);
+
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("Value must be finite");
+        }
 
         if (unit == null) {
             throw new IllegalArgumentException("Unit cannot be null");
@@ -18,8 +22,16 @@ public class QuantityLength {
         this.unit = unit;
     }
 
+    public double getValue() {
+        return value;
+    }
+
+    public LengthUnit getUnit() {
+        return unit;
+    }
+
     public double toFeet() {
-        return unit.toFeet(value);
+        return value * unit.getConversionFactor();
     }
 
     public QuantityLength convertTo(LengthUnit targetUnit) {
@@ -28,33 +40,22 @@ public class QuantityLength {
             throw new IllegalArgumentException("Target unit cannot be null");
         }
 
-        double feet = toFeet();
-        double converted = targetUnit.fromFeet(feet);
+        double valueInFeet = toFeet();
+        double convertedValue =
+                valueInFeet / targetUnit.getConversionFactor();
 
-        return new QuantityLength(converted, targetUnit);
+        return new QuantityLength(convertedValue, targetUnit);
     }
 
-    public static double convert(double value,
-                                 LengthUnit source,
-                                 LengthUnit target) {
+    @Override
+    public boolean equals(Object obj) {
 
-        validate(value);
+        if (this == obj) return true;
 
-        if (source == null || target == null) {
-            throw new IllegalArgumentException("Units cannot be null");
-        }
+        if (obj == null || getClass() != obj.getClass()) return false;
 
-        double feet = source.toFeet(value);
-        return target.fromFeet(feet);
-    }
+        QuantityLength other = (QuantityLength) obj;
 
-    private static void validate(double value) {
-        if (!Double.isFinite(value)) {
-            throw new IllegalArgumentException("Invalid value");
-        }
-    }
-
-    public boolean isEqual(QuantityLength other) {
         return Math.abs(this.toFeet() - other.toFeet()) < EPSILON;
     }
 
@@ -62,4 +63,6 @@ public class QuantityLength {
     public String toString() {
         return "Quantity(" + value + ", " + unit + ")";
     }
+
+
 }
