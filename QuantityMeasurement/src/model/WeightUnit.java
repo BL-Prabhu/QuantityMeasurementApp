@@ -1,30 +1,34 @@
 package model;
 
-public enum WeightUnit {
+public enum WeightUnit implements IMeasurable {
 
     KILOGRAM(1.0),
     GRAM(0.001),
     POUND(0.453592);
 
-    private final double factor;
+    private final double conversionFactor;
 
-    WeightUnit(double factor) {
-        this.factor = factor;
+    WeightUnit(double conversionFactor) {
+        this.conversionFactor = conversionFactor;
     }
 
-    public double toBase(double value) {
-        validate(value);
-        return value * factor;
+    @Override
+    public double getConversionFactor() {
+        return conversionFactor;
     }
 
-    public double fromBase(double baseValue) {
-        validate(baseValue);
-        return baseValue / factor;
+    @Override
+    public double convertToBaseUnit(double value) {
+        return value * conversionFactor;
     }
 
-    private void validate(double value) {
-        if (!Double.isFinite(value)) {
-            throw new IllegalArgumentException("Invalid value");
-        }
+    @Override
+    public double convertFromBaseUnit(double baseValue) {
+        return baseValue / conversionFactor;
+    }
+
+    @Override
+    public String getUnitName() {
+        return name();
     }
 }

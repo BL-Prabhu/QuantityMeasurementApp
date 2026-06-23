@@ -1,66 +1,173 @@
 package model;
 
-public class Quantity {
+public class Quantity<U extends IMeasurable> {
 
     private static final double EPSILON = 0.0001;
 
     private final double value;
-    private final LengthUnit unit;
+    private final U unit;
 
-    public Quantity(double value, LengthUnit unit) {
+    public Quantity(double value, U unit) {
 
-        if (!Double.isFinite(value)) {
-            throw new IllegalArgumentException("Invalid value");
-        }
+        validateValue(value);
 
         if (unit == null) {
-            throw new IllegalArgumentException("Unit cannot be null");
+            throw new IllegalArgumentException(
+                    "Unit cannot be null"
+            );
         }
 
         this.value = value;
         this.unit = unit;
     }
 
+    private void validateValue(double value) {
+
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException(
+                    "Value must be finite"
+            );
+        }
+    }
+
     public double getValue() {
         return value;
     }
 
-    public LengthUnit getUnit() {
+    public U getUnit() {
         return unit;
     }
 
-    public Quantity convertTo(LengthUnit targetUnit) {
+    // Convert to target unit
+    public Quantity<U> convertTo(U targetUnit) {
 
-        double base = unit.toBase(value);
-        double result = targetUnit.fromBase(base);
+        if (targetUnit == null) {
+            throw new IllegalArgumentException(
+                    "Target unit cannot be null"
+            );
+        }
 
-        return new Quantity(result, targetUnit);
+        double baseValue =
+                unit.convertToBaseUnit(value);
+
+        double convertedValue =
+                targetUnit.convertFromBaseUnit(
+                        baseValue
+                );
+
+        return new Quantity<>(
+                round(convertedValue),
+                targetUnit
+        );
     }
 
-    public Quantity add(Quantity other, LengthUnit targetUnit) {
+    // Add with default target unit
+    public Quantity<U> add(
+            Quantity<U> other
+    ) {
 
-        double base1 = unit.toBase(value);
-        double base2 = other.unit.toBase(other.value);
-
-        double sum = base1 + base2;
-
-        double result = targetUnit.fromBase(sum);
-
-        return new Quantity(result, targetUnit);
+        return add(other, this.unit);
     }
 
+    // Add with explicit target unit
+    public Quantity<U> add(
+            Quantity<U> other,
+            U targetUnit
+    ) {
+
+        if (other == null) {
+            throw new IllegalArgumentException(
+                    "Other quantity cannot be null"
+            );
+        }
+
+        if (targetUnit == null) {
+            throw new IllegalArgumentException(
+                    "Target unit cannot be null"
+            );
+        }
+
+        double firstBase =
+                unit.convertToBaseUnit(value);
+
+        double secondBase =
+                other.unit.convertToBaseUnit(
+                        other.value
+                );
+
+        double totalBase =
+                firstBase + secondBase;
+
+        double result =
+                targetUnit.convertFromBaseUnit(
+                        totalBase
+                );
+
+        return new Quantity<>(
+                round(result),
+                targetUnit
+        );
+    }
+
+    // Equality
     @Override
     public boolean equals(Object obj) {
 
-        if (this == obj) return true;
+        if (this == obj) {
+            return true;
+        }
 
-        if (!(obj instanceof Quantity)) return false;
+        if (obj == null ||
+                getClass() != obj.getClass()) {
+            return false;
+        }
 
-        Quantity other = (Quantity) obj;
+        Quantity<?> other =
+                (Quantity<?>) obj;
 
-        double base1 = unit.toBase(value);
-        double base2 = other.unit.toBase(other.value);
+        // Prevent cross-category comparison
+        if (this.unit.getClass() !=
+                other.unit.getClass()) {
+            return false;
+        }
 
-        return Math.abs(base1 - base2) < EPSILON;
+        double thisBase =
+                unit.convertToBaseUnit(value);
+
+        double otherBase =
+                other.unit.convertToBaseUnit(
+                        other.value
+                );
+
+        return Math.abs(
+                thisBase - otherBase
+        ) < EPSILON;
+    }
+
+    @Override
+    public int hashCode() {
+
+        double baseValue =
+                unit.convertToBaseUnit(value);
+
+        return Double.hashCode(
+                round(baseValue)
+        );
+    }
+
+    private double round(double value) {
+
+        return Math.round(value * 100.0)
+                / 100.0;
+    }
+
+    @Override
+    public String toString() {
+
+        return "Quantity(" +
+                value +
+                ", " +
+                unit.getUnitName() +
+                ")";
     }
 }

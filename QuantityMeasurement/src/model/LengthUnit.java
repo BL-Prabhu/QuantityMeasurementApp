@@ -1,36 +1,34 @@
 package model;
-
-public enum LengthUnit {
+public enum LengthUnit implements IMeasurable {
 
     FEET(1.0),
     INCHES(1.0 / 12.0),
-    YARD(3.0),
-    CENTIMETER(1.0 / 30.48);
+    YARDS(3.0),
+    CENTIMETERS(1.0 / 30.48);
 
-    private final double factor;
+    private final double conversionFactor;
 
-    LengthUnit(double factor) {
-        this.factor = factor;
+    LengthUnit(double conversionFactor) {
+        this.conversionFactor = conversionFactor;
     }
 
-    // ✅ ADD THIS METHOD (Required)
+    @Override
     public double getConversionFactor() {
-        return factor;
+        return conversionFactor;
     }
 
-    public double toBase(double value) {
-        validate(value);
-        return value * factor;
+    @Override
+    public double convertToBaseUnit(double value) {
+        return value * conversionFactor;
     }
 
-    public double fromBase(double baseValue) {
-        validate(baseValue);
-        return baseValue / factor;
+    @Override
+    public double convertFromBaseUnit(double baseValue) {
+        return baseValue / conversionFactor;
     }
 
-    private void validate(double value) {
-        if (!Double.isFinite(value)) {
-            throw new IllegalArgumentException("Invalid value");
-        }
+    @Override
+    public String getUnitName() {
+        return name();
     }
 }
