@@ -1,55 +1,53 @@
-# 📏 Quantity Measurement App – Use Case 7
+# Quantity Measurement System (UC9)
 
 ## 📌 Overview
-This project implements **addition of quantities with explicit target unit**.
+This project implements a Quantity Measurement system using clean architecture:
+- Model
+- Service
+- Controller
+- Test
+
+Supports:
+- Unit Conversion
+- Addition
+- Equality Comparison
 
 ---
 
-## 🧱 Structure
+## 📦 Packages
 
-model/
-service/
-controller/
-test/
+### model
+- Quantity.java
+- LengthUnit.java
+
+### service
+- QuantityService.java
+- QuantityServiceImpl.java
+
+### controller
+- QuantityController.java
+
+### test
+- QuantityServiceTest.java
 
 ---
 
-## ⚙️ Features
+## 🚀 Features
 
-- Add different units
-- Specify target unit
-- Automatic conversion
-- Handles edge cases
+### 1. Conversion
+Convert between units:
+- Feet ↔ Inches
+- Yard ↔ Feet
+- Centimeter ↔ Feet
 
----
+### 2. Addition
+Add quantities with different units.
 
-## 🧮 Examples
-
-1 ft + 12 in → 2 ft  
-1 ft + 12 in → 24 in  
-1 ft + 12 in → 0.6667 yd
+### 3. Equality
+Compare values across units.
 
 ---
 
 ## 🧪 Run Tests
 
-Run:
-QuantityServiceTest.java
-
----
-
-## ▶️ Run App
-
-Run:
-QuantityController.java
-
----
-
-## 🔥 Concepts
-
-- OOP
-- Layered Architecture
-- Unit Conversion
-- Clean Code
-
----
+Use JUnit:
