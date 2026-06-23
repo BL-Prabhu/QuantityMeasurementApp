@@ -1,3 +1,4 @@
+ feature/UC8-Standalone-Lengthunit-Refactor
 # Quantity Measurement System – UC8
 
 ## 📌 Overview
@@ -10,7 +11,7 @@ This project implements a **Quantity Measurement System** with support for:
 
 UC8 focuses on:
 
-> Performing addition of two quantities with a **specified target unit**
+ Performing addition of two quantities with a **specified target unit**
 
 ---
 
@@ -64,9 +65,34 @@ You can specify the result unit explicitly:
 1 FEET + 12 INCHES → result in INCHES = 24 INCHES
 1 FEET + 12 INCHES → result in FEET = 2 FEET
 ```
+=======
+# Quantity Measurement System (UC9)
+
+## 📌 Overview
+This project implements a Quantity Measurement system using clean architecture:
+- Model
+- Service
+- Controller
+- Test
+
+Supports:
+- Unit Conversion
+- Addition
+- Equality Comparison
 
 ---
 
+## 📦 Packages
+
+### model
+- Quantity.java
+- LengthUnit.java
+ dev
+
+### service
+- QuantityService.java
+- QuantityServiceImpl.java
+ feature/UC8-Standalone-Lengthunit-Refactor
 ### ✅ 4. Equality Check
 
 Compares values across units:
@@ -164,3 +190,32 @@ UC8 enhances the system by:
 ## 👨‍💻 Author
 
 Quantity Measurement Assignment – Clean Code Implementation
+=======
+### controller
+- QuantityController.java
+
+### test
+- QuantityServiceTest.java
+
+---
+
+## 🚀 Features
+
+### 1. Conversion
+Convert between units:
+- Feet ↔ Inches
+- Yard ↔ Feet
+- Centimeter ↔ Feet
+
+### 2. Addition
+Add quantities with different units.
+
+### 3. Equality
+Compare values across units.
+
+---
+
+## 🧪 Run Tests
+
+Use JUnit:
+ dev

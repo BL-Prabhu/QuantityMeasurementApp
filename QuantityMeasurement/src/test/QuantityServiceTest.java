@@ -15,7 +15,6 @@ public class QuantityServiceTest {
     private final QuantityService service =
             new QuantityServiceImpl();
 
-    // ✅ Convert Test
     @Test
     public void testConvert_FeetToInches() {
 
@@ -26,7 +25,6 @@ public class QuantityServiceTest {
         assertEquals(12.0, result.getValue(), EPSILON);
     }
 
-    // ✅ Add Test
     @Test
     public void testAdd_FeetAndInches() {
 
@@ -39,17 +37,15 @@ public class QuantityServiceTest {
         assertEquals(2.0, result.getValue(), EPSILON);
     }
 
-    // ✅ Equality Test
     @Test
     public void testEquality() {
 
         Quantity q1 = new Quantity(36, LengthUnit.INCHES);
-        Quantity q2 = new Quantity(1, LengthUnit.YARD); // ✅ FIXED
+        Quantity q2 = new Quantity(1, LengthUnit.YARD);
 
         assertTrue(q1.equals(q2));
     }
 
-    // ✅ Invalid Input Test
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidValue() {
         new Quantity(Double.NaN, LengthUnit.FEET);

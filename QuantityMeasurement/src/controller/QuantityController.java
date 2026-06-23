@@ -7,26 +7,21 @@ import service.QuantityServiceImpl;
 
 public class QuantityController {
 
-    public static void main(String[] args) {
+    private final QuantityService service = new QuantityServiceImpl();
 
-        QuantityService service = new QuantityServiceImpl();
+    public Quantity convert(double value, LengthUnit from, LengthUnit to) {
 
-        // Convert
-        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
-        Quantity converted = service.convert(q1, LengthUnit.INCHES);
+        Quantity quantity = new Quantity(value, from);
+        return service.convert(quantity, to);
+    }
 
-        System.out.println("Convert 1 FEET to INCHES: " + converted.getValue());
+    public Quantity add(double v1, LengthUnit u1,
+                        double v2, LengthUnit u2,
+                        LengthUnit target) {
 
-        // Add
-        Quantity q2 = new Quantity(12.0, LengthUnit.INCHES);
-        Quantity result = service.add(q1, q2, LengthUnit.FEET);
+        Quantity q1 = new Quantity(v1, u1);
+        Quantity q2 = new Quantity(v2, u2);
 
-        System.out.println("Add 1 FEET + 12 INCHES in FEET: " + result.getValue());
-
-        // Equality
-        Quantity q3 = new Quantity(36.0, LengthUnit.INCHES);
-        Quantity q4 = new Quantity(1.0, LengthUnit.YARD);
-
-        System.out.println("36 INCHES == 1 YARD: " + q3.equals(q4));
+        return service.add(q1, q2, target);
     }
 }
