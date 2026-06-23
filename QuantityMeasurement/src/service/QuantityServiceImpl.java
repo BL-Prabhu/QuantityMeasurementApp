@@ -1,10 +1,7 @@
 package service;
 
-
 import model.IMeasurable;
 import model.Quantity;
-
-import java.util.Objects;
 
 public class QuantityServiceImpl implements QuantityService {
 
@@ -13,33 +10,23 @@ public class QuantityServiceImpl implements QuantityService {
             Quantity<U> quantity,
             U targetUnit
     ) {
-        Objects.requireNonNull(quantity);
-        Objects.requireNonNull(targetUnit);
-
         return quantity.convertTo(targetUnit);
     }
 
     @Override
     public <U extends IMeasurable> Quantity<U> add(
-            Quantity<U> q1,
-            Quantity<U> q2,
+            Quantity<U> first,
+            Quantity<U> second,
             U targetUnit
     ) {
-        Objects.requireNonNull(q1);
-        Objects.requireNonNull(q2);
-        Objects.requireNonNull(targetUnit);
-
-        return q1.add(q2, targetUnit);
+        return first.add(second, targetUnit);
     }
 
     @Override
-    public <U extends IMeasurable> boolean areEqual(
-            Quantity<U> q1,
-            Quantity<U> q2
+    public <U extends IMeasurable> boolean equals(
+            Quantity<U> first,
+            Quantity<U> second
     ) {
-        Objects.requireNonNull(q1);
-        Objects.requireNonNull(q2);
-
-        return q1.equals(q2);
+        return first.equals(second);
     }
 }
