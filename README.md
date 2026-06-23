@@ -1,3 +1,6 @@
+ feature/UC9-Weight-Measurement-Support
+# Quantity Length System (UC9)
+=======
  feature/UC8-Standalone-Lengthunit-Refactor
 # Quantity Measurement System – UC8
 
@@ -67,29 +70,33 @@ You can specify the result unit explicitly:
 ```
 =======
 # Quantity Measurement System (UC9)
+ dev
 
 ## 📌 Overview
-This project implements a Quantity Measurement system using clean architecture:
+This project implements a Length Measurement system using a layered architecture:
+
 - Model
 - Service
 - Controller
 - Test
 
-
-Supports:
-- Unit Conversion
-- Addition
-- Equality Comparison
-
 ---
 
-## 📦 Packages
+## 📦 Structure
 
-### model
-- Quantity.java
+model/
+- QuantityLength.java
 - LengthUnit.java
  dev
 
+ feature/UC9-Weight-Measurement-Support
+service/
+- QuantityLengthService.java
+- QuantityLengthServiceImpl.java
+
+controller/
+- QuantityLengthController.java
+=======
 ### service
 - QuantityService.java
 - QuantityServiceImpl.java
@@ -194,29 +201,27 @@ Quantity Measurement Assignment – Clean Code Implementation
 =======
 ### controller
 - QuantityController.java
+ dev
 
-### test
-- QuantityServiceTest.java
+test/
+- QuantityLengthServiceTest.java
 
 ---
 
 ## 🚀 Features
 
-### 1. Conversion
-Convert between units:
-- Feet ↔ Inches
-- Yard ↔ Feet
-- Centimeter ↔ Feet
-
-### 2. Addition
-Add quantities with different units.
-
-### 3. Equality
-Compare values across units.
+✔ Unit Conversion (Feet, Inches, Yards, CM)  
+✔ Addition of quantities  
+✔ Equality comparison  
+✔ Clean architecture
 
 ---
 
 ## 🧪 Run Tests
 
+ feature/UC9-Weight-Measurement-Support
+Using Maven:
+=======
 Use JUnit:
+ dev
  dev
