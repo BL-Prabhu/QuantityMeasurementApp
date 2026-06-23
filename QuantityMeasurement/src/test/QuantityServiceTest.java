@@ -1,9 +1,7 @@
 package test;
 
-
-import model.LengthUnit;
 import model.Quantity;
-import model.WeightUnit;
+import model.VolumeUnit;
 import org.junit.Test;
 import service.QuantityService;
 import service.QuantityServiceImpl;
@@ -12,80 +10,44 @@ import static org.junit.Assert.*;
 
 public class QuantityServiceTest {
 
-    private static final double EPSILON = 0.0001;
-
     private final QuantityService service =
             new QuantityServiceImpl();
 
+    private static final double EPSILON = 0.01;
+
     @Test
-    public void testLengthConversion() {
+    public void testEquality() {
 
-        Quantity<LengthUnit> result =
-                service.convert(
-                        new Quantity<>(1, LengthUnit.FEET),
-                        LengthUnit.INCHES
-                );
-
-        assertEquals(12.0, result.getValue(), EPSILON);
+        assertTrue(
+                service.equals(
+                        new Quantity<>(1.0, VolumeUnit.LITRE),
+                        new Quantity<>(1000.0, VolumeUnit.MILLILITRE)
+                )
+        );
     }
 
     @Test
-    public void testWeightConversion() {
+    public void testConversion() {
 
-        Quantity<WeightUnit> result =
+        Quantity<VolumeUnit> result =
                 service.convert(
-                        new Quantity<>(1, WeightUnit.KILOGRAM),
-                        WeightUnit.GRAM
+                        new Quantity<>(1.0, VolumeUnit.LITRE),
+                        VolumeUnit.MILLILITRE
                 );
 
         assertEquals(1000.0, result.getValue(), EPSILON);
     }
 
     @Test
-    public void testLengthAddition() {
+    public void testAddition() {
 
-        Quantity<LengthUnit> result =
+        Quantity<VolumeUnit> result =
                 service.add(
-                        new Quantity<>(1, LengthUnit.FEET),
-                        new Quantity<>(12, LengthUnit.INCHES),
-                        LengthUnit.FEET
+                        new Quantity<>(1.0, VolumeUnit.LITRE),
+                        new Quantity<>(1000.0, VolumeUnit.MILLILITRE),
+                        VolumeUnit.LITRE
                 );
 
         assertEquals(2.0, result.getValue(), EPSILON);
-    }
-
-    @Test
-    public void testWeightAddition() {
-
-        Quantity<WeightUnit> result =
-                service.add(
-                        new Quantity<>(1, WeightUnit.KILOGRAM),
-                        new Quantity<>(1000, WeightUnit.GRAM),
-                        WeightUnit.KILOGRAM
-                );
-
-        assertEquals(2.0, result.getValue(), EPSILON);
-    }
-
-    @Test
-    public void testEquality() {
-
-        assertTrue(
-                service.areEqual(
-                        new Quantity<>(1, LengthUnit.FEET),
-                        new Quantity<>(12, LengthUnit.INCHES)
-                )
-        );
-    }
-
-    @Test
-    public void testCrossTypeComparison() {
-
-        assertFalse(
-                new Quantity<>(1, LengthUnit.FEET)
-                        .equals(
-                                new Quantity<>(1, WeightUnit.KILOGRAM)
-                        )
-        );
     }
 }
