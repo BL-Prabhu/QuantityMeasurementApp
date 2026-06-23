@@ -1,21 +1,15 @@
 package model;
 
-public enum LengthUnit {
+public enum WeightUnit {
 
-    FEET(1.0),
-    INCHES(1.0 / 12.0),
-    YARD(3.0),
-    CENTIMETER(1.0 / 30.48);
+    KILOGRAM(1.0),
+    GRAM(0.001),
+    POUND(0.453592);
 
     private final double factor;
 
-    LengthUnit(double factor) {
+    WeightUnit(double factor) {
         this.factor = factor;
-    }
-
-    // ✅ ADD THIS METHOD (Required)
-    public double getConversionFactor() {
-        return factor;
     }
 
     public double toBase(double value) {

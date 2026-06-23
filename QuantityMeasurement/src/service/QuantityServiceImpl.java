@@ -12,10 +12,7 @@ public class QuantityServiceImpl implements QuantityService {
             throw new IllegalArgumentException("Invalid input");
         }
 
-        double base = quantity.toBase();
-        double result = targetUnit.fromBase(base);
-
-        return new Quantity(result, targetUnit);
+        return quantity.convertTo(targetUnit);
     }
 
     @Override
@@ -25,9 +22,6 @@ public class QuantityServiceImpl implements QuantityService {
             throw new IllegalArgumentException("Invalid input");
         }
 
-        double totalBase = q1.toBase() + q2.toBase();
-        double result = targetUnit.fromBase(totalBase);
-
-        return new Quantity(result, targetUnit);
+        return q1.add(q2, targetUnit);
     }
 }
