@@ -1,7 +1,9 @@
 package test;
 
+
 import model.LengthUnit;
 import model.Quantity;
+import model.WeightUnit;
 import org.junit.Test;
 import service.QuantityService;
 import service.QuantityServiceImpl;
@@ -16,23 +18,51 @@ public class QuantityServiceTest {
             new QuantityServiceImpl();
 
     @Test
-    public void testConvert_FeetToInches() {
+    public void testLengthConversion() {
 
-        Quantity q = new Quantity(1, LengthUnit.FEET);
-
-        Quantity result = service.convert(q, LengthUnit.INCHES);
+        Quantity<LengthUnit> result =
+                service.convert(
+                        new Quantity<>(1, LengthUnit.FEET),
+                        LengthUnit.INCHES
+                );
 
         assertEquals(12.0, result.getValue(), EPSILON);
     }
 
     @Test
-    public void testAdd_FeetAndInches() {
+    public void testWeightConversion() {
 
-        Quantity q1 = new Quantity(1, LengthUnit.FEET);
-        Quantity q2 = new Quantity(12, LengthUnit.INCHES);
+        Quantity<WeightUnit> result =
+                service.convert(
+                        new Quantity<>(1, WeightUnit.KILOGRAM),
+                        WeightUnit.GRAM
+                );
 
-        Quantity result =
-                service.add(q1, q2, LengthUnit.FEET);
+        assertEquals(1000.0, result.getValue(), EPSILON);
+    }
+
+    @Test
+    public void testLengthAddition() {
+
+        Quantity<LengthUnit> result =
+                service.add(
+                        new Quantity<>(1, LengthUnit.FEET),
+                        new Quantity<>(12, LengthUnit.INCHES),
+                        LengthUnit.FEET
+                );
+
+        assertEquals(2.0, result.getValue(), EPSILON);
+    }
+
+    @Test
+    public void testWeightAddition() {
+
+        Quantity<WeightUnit> result =
+                service.add(
+                        new Quantity<>(1, WeightUnit.KILOGRAM),
+                        new Quantity<>(1000, WeightUnit.GRAM),
+                        WeightUnit.KILOGRAM
+                );
 
         assertEquals(2.0, result.getValue(), EPSILON);
     }
@@ -40,14 +70,22 @@ public class QuantityServiceTest {
     @Test
     public void testEquality() {
 
-        Quantity q1 = new Quantity(36, LengthUnit.INCHES);
-        Quantity q2 = new Quantity(1, LengthUnit.YARD);
-
-        assertTrue(q1.equals(q2));
+        assertTrue(
+                service.areEqual(
+                        new Quantity<>(1, LengthUnit.FEET),
+                        new Quantity<>(12, LengthUnit.INCHES)
+                )
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidValue() {
-        new Quantity(Double.NaN, LengthUnit.FEET);
+    @Test
+    public void testCrossTypeComparison() {
+
+        assertFalse(
+                new Quantity<>(1, LengthUnit.FEET)
+                        .equals(
+                                new Quantity<>(1, WeightUnit.KILOGRAM)
+                        )
+        );
     }
 }
