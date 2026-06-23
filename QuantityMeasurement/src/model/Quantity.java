@@ -1,8 +1,6 @@
 package model;
 
-import java.util.Objects;
-
-public final class Quantity {
+public class Quantity {
 
     private static final double EPSILON = 0.0001;
 
@@ -15,8 +13,12 @@ public final class Quantity {
             throw new IllegalArgumentException("Invalid value");
         }
 
-        this.unit = Objects.requireNonNull(unit, "Unit cannot be null");
+        if (unit == null) {
+            throw new IllegalArgumentException("Unit cannot be null");
+        }
+
         this.value = value;
+        this.unit = unit;
     }
 
     public double getValue() {
@@ -27,28 +29,38 @@ public final class Quantity {
         return unit;
     }
 
-    public double toBase() {
-        return unit.toBase(value);
+    public Quantity convertTo(LengthUnit targetUnit) {
+
+        double base = unit.toBase(value);
+        double result = targetUnit.fromBase(base);
+
+        return new Quantity(result, targetUnit);
+    }
+
+    public Quantity add(Quantity other, LengthUnit targetUnit) {
+
+        double base1 = unit.toBase(value);
+        double base2 = other.unit.toBase(other.value);
+
+        double sum = base1 + base2;
+
+        double result = targetUnit.fromBase(sum);
+
+        return new Quantity(result, targetUnit);
     }
 
     @Override
     public boolean equals(Object obj) {
 
         if (this == obj) return true;
+
         if (!(obj instanceof Quantity)) return false;
 
         Quantity other = (Quantity) obj;
 
-        return Math.abs(this.toBase() - other.toBase()) < EPSILON;
-    }
+        double base1 = unit.toBase(value);
+        double base2 = other.unit.toBase(other.value);
 
-    @Override
-    public int hashCode() {
-        return Double.hashCode(toBase());
-    }
-
-    @Override
-    public String toString() {
-        return "Quantity(" + value + ", " + unit + ")";
+        return Math.abs(base1 - base2) < EPSILON;
     }
 }
