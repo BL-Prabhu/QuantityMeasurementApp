@@ -1,54 +1,42 @@
-# Quantity Measurement System (UC9)
+# Quantity Length System (UC9)
 
 ## 📌 Overview
-This project implements a Quantity Measurement system using clean architecture:
+This project implements a Length Measurement system using a layered architecture:
+
 - Model
 - Service
 - Controller
 - Test
 
-
-Supports:
-- Unit Conversion
-- Addition
-- Equality Comparison
-
 ---
 
-## 📦 Packages
+## 📦 Structure
 
-### model
-- Quantity.java
+model/
+- QuantityLength.java
 - LengthUnit.java
 
-### service
-- QuantityService.java
-- QuantityServiceImpl.java
+service/
+- QuantityLengthService.java
+- QuantityLengthServiceImpl.java
 
-### controller
-- QuantityController.java
+controller/
+- QuantityLengthController.java
 
-### test
-- QuantityServiceTest.java
+test/
+- QuantityLengthServiceTest.java
 
 ---
 
 ## 🚀 Features
 
-### 1. Conversion
-Convert between units:
-- Feet ↔ Inches
-- Yard ↔ Feet
-- Centimeter ↔ Feet
-
-### 2. Addition
-Add quantities with different units.
-
-### 3. Equality
-Compare values across units.
+✔ Unit Conversion (Feet, Inches, Yards, CM)  
+✔ Addition of quantities  
+✔ Equality comparison  
+✔ Clean architecture
 
 ---
 
 ## 🧪 Run Tests
 
-Use JUnit:
+Using Maven:
