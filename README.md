@@ -1,176 +1,117 @@
- feature/UC9-Weight-Measurement-Support
-# Quantity Length System (UC9)
-=======
- feature/UC8-Standalone-Lengthunit-Refactor
-# Quantity Measurement System – UC8
+# Quantity Measurement System – UC10
 
 ## 📌 Overview
 
-This project implements a **Quantity Measurement System** with support for:
+UC10 introduces a **Generic Quantity Measurement System** using:
 
-* Unit conversion
-* Addition of quantities
-* Explicit target unit operations
-
-UC8 focuses on:
-
- Performing addition of two quantities with a **specified target unit**
+* Generics
+* Abstraction (`IMeasurable`)
+* Multi-unit support (Length + Weight)
 
 ---
 
-## 🧱 Project Structure
+## 🧱 Architecture
 
 ```
 model/
-  ├── QuantityLength.java
+  ├── IMeasurable.java
+  ├── Quantity.java
   ├── LengthUnit.java
+  ├── WeightUnit.java
 
 service/
-  ├── QuantityLengthService.java
-  ├── QuantityLengthServiceImpl.java
+  ├── QuantityService.java
+  ├── QuantityServiceImpl.java
 
 controller/
-  ├── QuantityLengthController.java
+  ├── QuantityController.java
 
 test/
-  ├── QuantityLengthServiceTest.java
+  ├── QuantityServiceTest.java
 ```
 
 ---
 
-## 🚀 Features (UC8)
+## 🚀 Features
 
-### ✅ 1. Unit Conversion
+### ✅ Generic Design
 
-Convert between:
+Single `Quantity<U>` class supports:
 
-* Feet ↔ Inches
-* Feet ↔ Yard
-* Feet ↔ Centimeter
-
----
-
-### ✅ 2. Addition (Same / Different Units)
-
-Supports:
-
-```
-1 FEET + 1 FEET = 2 FEET
-```
+* Length
+* Weight
+* Any future measurement
 
 ---
 
-### ✅ 3. Addition with Target Unit (UC8 Core Feature ⭐)
-
-You can specify the result unit explicitly:
+### ✅ Conversion
 
 ```
-1 FEET + 12 INCHES → result in INCHES = 24 INCHES
-1 FEET + 12 INCHES → result in FEET = 2 FEET
-```
-=======
-# Quantity Measurement System (UC9)
- dev
-
-## 📌 Overview
-This project implements a Length Measurement system using a layered architecture:
-
-- Model
-- Service
-- Controller
-- Test
-
----
-
-## 📦 Structure
-
-model/
-- QuantityLength.java
-- LengthUnit.java
- dev
-
- feature/UC9-Weight-Measurement-Support
-service/
-- QuantityLengthService.java
-- QuantityLengthServiceImpl.java
-
-controller/
-- QuantityLengthController.java
-=======
-### service
-- QuantityService.java
-- QuantityServiceImpl.java
- feature/UC8-Standalone-Lengthunit-Refactor
-### ✅ 4. Equality Check
-
-Compares values across units:
-
-```
-36 INCHES == 1 YARD ✔
+1 FEET → 12 INCHES
+1 KG → 1000 GRAM
 ```
 
 ---
 
-## 🧪 Example Usage
-
-### Conversion
+### ✅ Addition
 
 ```
-QuantityLength q = new QuantityLength(1, FEET);
-q.convertTo(INCHES); // 12
-```
-
-### Addition (UC8)
-
-```
-service.add(q1, q2, INCHES);
+1 FEET + 12 INCHES = 2 FEET
+1 KG + 1000 GRAM = 2 KG
 ```
 
 ---
 
-## ⚙️ Design Principles
+### ✅ Equality
 
-* ✔ Immutable Model Objects
-* ✔ Validation (No NaN / Infinite values)
-* ✔ Base Unit Conversion (Feet)
-* ✔ Separation of Concerns
-* ✔ Clean Service Layer
+```
+12 INCHES == 1 FEET
+1000 GRAM == 1 KG
+```
 
 ---
 
-## 🧮 Core Logic
-
-All operations convert values to a **base unit (Feet)**:
+### ✅ Type Safety (🔥 UC10 Highlight)
 
 ```
-Step 1: Convert both values to Feet  
-Step 2: Perform operation  
-Step 3: Convert result to target unit  
+Length ≠ Weight
 ```
+
+Cross comparison is prevented.
+
+---
+
+## ⚙️ Core Design
+
+### Interface: IMeasurable
+
+Defines:
+
+* Conversion to base unit
+* Conversion from base unit
+
+---
+
+### Generic Class: Quantity<U>
+
+* Works with any unit type
+* Uses base unit conversion internally
 
 ---
 
 ## 🧪 Running Tests
 
-Using Maven:
-
 ```
 mvn test
 ```
 
-Or run test class from IDE:
-
-```
-QuantityLengthServiceTest
-```
-
 ---
 
-## ❗ Validations
+## 📐 Logic Flow
 
-* Null unit → ❌ Exception
-* NaN / Infinite values → ❌ Exception
-* Null inputs in service → ❌ Exception
+```
+Convert → Base Unit → Perform Operation → Convert Back
+```
 
 ---
 
@@ -178,50 +119,25 @@ QuantityLengthServiceTest
 
 | Use Case | Description                          |
 | -------- | ------------------------------------ |
-| UC1–UC5  | Basic equality & conversion          |
-| UC6      | Addition (default unit)              |
-| UC7      | Addition with unit flexibility       |
-| **UC8**  | ⭐ Addition with explicit target unit |
+| UC1–UC5  | Equality & conversion                |
+| UC6      | Addition                             |
+| UC7      | Addition with unit                   |
+| UC8      | Explicit target unit                 |
+| UC9      | Service layer                        |
+| **UC10** | ⭐ Generic + multi-measurement system |
 
 ---
 
-## 📌 Summary
+## 🔥 Key Advantages
 
-UC8 enhances the system by:
-
-* Allowing flexible result units
-* Supporting real-world measurement scenarios
-* Improving usability of addition operations
+* Reusable design
+* Extensible (Temperature, Volume, etc.)
+* Clean architecture
+* Strong type safety
+* Interview-ready design
 
 ---
 
 ## 👨‍💻 Author
 
-Quantity Measurement Assignment – Clean Code Implementation
-=======
-### controller
-- QuantityController.java
- dev
-
-test/
-- QuantityLengthServiceTest.java
-
----
-
-## 🚀 Features
-
-✔ Unit Conversion (Feet, Inches, Yards, CM)  
-✔ Addition of quantities  
-✔ Equality comparison  
-✔ Clean architecture
-
----
-
-## 🧪 Run Tests
-
- feature/UC9-Weight-Measurement-Support
-Using Maven:
-=======
-Use JUnit:
- dev
- dev
+Clean Code – Quantity Measurement System
