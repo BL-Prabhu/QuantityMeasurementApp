@@ -1,143 +1,51 @@
-# Quantity Measurement System – UC10
+# Quantity Measurement System - Use Case 11 (Volume)
 
 ## 📌 Overview
+This project implements a generic measurement system supporting:
 
-UC10 introduces a **Generic Quantity Measurement System** using:
+- Volume Conversion
+- Equality Comparison
+- Addition of quantities
 
-* Generics
-* Abstraction (`IMeasurable`)
-* Multi-unit support (Length + Weight)
+Using a scalable generic design.
+
+---
+
+## ⚙️ Supported Units
+
+| Unit        | Conversion |
+|------------|-----------|
+| LITRE       | Base Unit |
+| MILLILITRE  | 0.001 L   |
+| GALLON      | 3.78541 L |
 
 ---
 
 ## 🧱 Architecture
 
-```
-model/
-  ├── IMeasurable.java
-  ├── Quantity.java
-  ├── LengthUnit.java
-  ├── WeightUnit.java
-
-service/
-  ├── QuantityService.java
-  ├── QuantityServiceImpl.java
-
-controller/
-  ├── QuantityController.java
-
-test/
-  ├── QuantityServiceTest.java
-```
+- Model → Core logic (Quantity, Units)
+- Service → Business operations
+- Controller → Execution layer
+- Test → JUnit validation
 
 ---
 
 ## 🚀 Features
 
-### ✅ Generic Design
-
-Single `Quantity<U>` class supports:
-
-* Length
-* Weight
-* Any future measurement
+✅ Generic Quantity class  
+✅ Cross-unit conversion  
+✅ Equality using base unit  
+✅ Addition with target unit  
+✅ Cross-category safety
 
 ---
 
-### ✅ Conversion
+## 🧪 Example
 
-```
-1 FEET → 12 INCHES
-1 KG → 1000 GRAM
-```
+```java
+Quantity<VolumeUnit> litre = new Quantity<>(1, LITRE);
+Quantity<VolumeUnit> ml = new Quantity<>(1000, MILLILITRE);
 
----
-
-### ✅ Addition
-
-```
-1 FEET + 12 INCHES = 2 FEET
-1 KG + 1000 GRAM = 2 KG
-```
-
----
-
-### ✅ Equality
-
-```
-12 INCHES == 1 FEET
-1000 GRAM == 1 KG
-```
-
----
-
-### ✅ Type Safety (🔥 UC10 Highlight)
-
-```
-Length ≠ Weight
-```
-
-Cross comparison is prevented.
-
----
-
-## ⚙️ Core Design
-
-### Interface: IMeasurable
-
-Defines:
-
-* Conversion to base unit
-* Conversion from base unit
-
----
-
-### Generic Class: Quantity<U>
-
-* Works with any unit type
-* Uses base unit conversion internally
-
----
-
-## 🧪 Running Tests
-
-```
-mvn test
-```
-
----
-
-## 📐 Logic Flow
-
-```
-Convert → Base Unit → Perform Operation → Convert Back
-```
-
----
-
-## 🎯 Use Case Coverage
-
-| Use Case | Description                          |
-| -------- | ------------------------------------ |
-| UC1–UC5  | Equality & conversion                |
-| UC6      | Addition                             |
-| UC7      | Addition with unit                   |
-| UC8      | Explicit target unit                 |
-| UC9      | Service layer                        |
-| **UC10** | ⭐ Generic + multi-measurement system |
-
----
-
-## 🔥 Key Advantages
-
-* Reusable design
-* Extensible (Temperature, Volume, etc.)
-* Clean architecture
-* Strong type safety
-* Interview-ready design
-
----
-
-## 👨‍💻 Author
-
-Clean Code – Quantity Measurement System
+litre.equals(ml); // true
+litre.convertTo(MILLILITRE); // 1000
+litre.add(ml); // 2 litres
