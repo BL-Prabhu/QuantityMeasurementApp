@@ -26,4 +26,9 @@ public enum LengthUnit implements IMeasurable {
     public double convertFromBaseUnit(double baseValue) {
         return baseValue / factor;
     }
+
+    @Override
+    public String getUnitName() {
+        return name();
+    }
 }

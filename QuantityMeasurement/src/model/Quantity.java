@@ -1,15 +1,13 @@
 package model;
 
-public class Quantity<U extends IMeasurable>
-        implements Comparable<Quantity<U>> {
+import java.util.Objects;
+
+public class Quantity<T extends IMeasurable> {
 
     private final double value;
-    private final U unit;
+    private final T unit;
 
-    public Quantity(double value, U unit) {
-        if (unit == null) {
-            throw new IllegalArgumentException("Unit cannot be null");
-        }
+    public Quantity(double value, T unit) {
         this.value = value;
         this.unit = unit;
     }
@@ -18,72 +16,119 @@ public class Quantity<U extends IMeasurable>
         return value;
     }
 
-    public U getUnit() {
+    public T getUnit() {
         return unit;
     }
 
-    // 🔹 Comparison logic
+    // 🔥 COMMON VALIDATION
+    private void validateArithmetic(Quantity<T> other) {
+
+        if (!unit.getClass().equals(other.unit.getClass())) {
+            throw new IllegalArgumentException("Incompatible units");
+        }
+
+        // 🚫 Temperature restriction
+        if (unit instanceof TemperatureUnit) {
+            throw new UnsupportedOperationException(
+                    "Temperature does not support arithmetic operations"
+            );
+        }
+    }
+
+    // ✅ ADD
+    public Quantity<T> add(Quantity<T> other) {
+        validateArithmetic(other);
+
+        double base1 = unit.convertToBaseUnit(value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
+
+        double resultBase = base1 + base2;
+
+        double finalValue = unit.convertFromBaseUnit(resultBase);
+
+        return new Quantity<>(finalValue, unit);
+    }
+
+    // ✅ ADD with target unit
+    public Quantity<T> add(Quantity<T> other, T targetUnit) {
+        validateArithmetic(other);
+
+        double base1 = unit.convertToBaseUnit(value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
+
+        double resultBase = base1 + base2;
+
+        double finalValue = targetUnit.convertFromBaseUnit(resultBase);
+
+        return new Quantity<>(finalValue, targetUnit);
+    }
+
+    // ✅ SUBTRACT
+    public Quantity<T> subtract(Quantity<T> other) {
+        return subtract(other, unit);
+    }
+
+    // ✅ SUBTRACT with target unit
+    public Quantity<T> subtract(Quantity<T> other, T targetUnit) {
+        validateArithmetic(other);
+
+        double base1 = unit.convertToBaseUnit(value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
+
+        double resultBase = base1 - base2;
+
+        double finalValue = targetUnit.convertFromBaseUnit(resultBase);
+
+        return new Quantity<>(finalValue, targetUnit);
+    }
+
+    // ✅ DIVIDE
+    public double divide(Quantity<T> other) {
+
+        if (!unit.getClass().equals(other.unit.getClass())) {
+            throw new IllegalArgumentException("Incompatible units");
+        }
+
+        double base1 = unit.convertToBaseUnit(value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
+
+        return base1 / base2;
+    }
+
+    // ✅ CONVERT
+    public Quantity<T> convertTo(T targetUnit) {
+
+        if (!unit.getClass().equals(targetUnit.getClass())) {
+            throw new IllegalArgumentException("Incompatible units");
+        }
+
+        double baseValue = unit.convertToBaseUnit(value);
+        double converted = targetUnit.convertFromBaseUnit(baseValue);
+
+        return new Quantity<>(converted, targetUnit);
+    }
+
+    // ✅ EQUALITY
     @Override
-    public int compareTo(Quantity<U> other) {
+    public boolean equals(Object obj) {
 
-        if (other == null) {
-            throw new IllegalArgumentException("Cannot compare with null");
-        }
+        if (this == obj) return true;
 
+        if (!(obj instanceof Quantity<?> other)) return false;
+
+        // ❌ Different measurement types
         if (!unit.getClass().equals(other.unit.getClass())) {
-            throw new IllegalArgumentException("Cross-category comparison not allowed");
+            return false;
         }
 
-        double thisBase = unit.convertToBaseUnit(value);
-        double otherBase = other.unit.convertToBaseUnit(other.value);
+        double base1 = unit.convertToBaseUnit(value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
 
-        return Double.compare(thisBase, otherBase);
+        return Math.abs(base1 - base2) < 0.01;
     }
 
     @Override
-    public String toString() {
-        return value + " " + unit;
-    }
-
-    // 🔹 Subtraction
-    public Quantity<U> subtract(Quantity<U> other, U resultUnit) {
-
-        if (other == null) {
-            throw new IllegalArgumentException("Cannot subtract null");
-        }
-
-        if (!unit.getClass().equals(other.unit.getClass())) {
-            throw new IllegalArgumentException("Cross-category not allowed");
-        }
-
-        double thisBase = unit.convertToBaseUnit(value);
-        double otherBase = other.unit.convertToBaseUnit(other.value);
-
-        double resultBase = thisBase - otherBase;
-
-        double finalValue = resultUnit.convertFromBaseUnit(resultBase);
-
-        return new Quantity<>(finalValue, resultUnit);
-    }
-
-    // 🔹 Division
-    public double divide(Quantity<U> other) {
-
-        if (other == null) {
-            throw new IllegalArgumentException("Cannot divide by null");
-        }
-
-        if (!unit.getClass().equals(other.unit.getClass())) {
-            throw new IllegalArgumentException("Cross-category not allowed");
-        }
-
-        double thisBase = unit.convertToBaseUnit(value);
-        double otherBase = other.unit.convertToBaseUnit(other.value);
-
-        if (otherBase == 0) {
-            throw new ArithmeticException("Division by zero");
-        }
-
-        return thisBase / otherBase;
+    public int hashCode() {
+        return Objects.hash(unit.getClass(), unit.convertToBaseUnit(value));
     }
 }
