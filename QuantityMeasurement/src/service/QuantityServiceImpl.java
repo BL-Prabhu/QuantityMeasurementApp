@@ -3,30 +3,15 @@ package service;
 import model.IMeasurable;
 import model.Quantity;
 
-public class QuantityServiceImpl implements QuantityService {
+public class QuantityServiceImpl<U extends IMeasurable> implements QuantityService<U> {
 
     @Override
-    public <U extends IMeasurable> Quantity<U> convert(
-            Quantity<U> quantity,
-            U targetUnit
-    ) {
-        return quantity.convertTo(targetUnit);
+    public Quantity<U> subtract(Quantity<U> q1, Quantity<U> q2, U unit) {
+        return q1.subtract(q2, unit);
     }
 
     @Override
-    public <U extends IMeasurable> Quantity<U> add(
-            Quantity<U> first,
-            Quantity<U> second,
-            U targetUnit
-    ) {
-        return first.add(second, targetUnit);
-    }
-
-    @Override
-    public <U extends IMeasurable> boolean equals(
-            Quantity<U> first,
-            Quantity<U> second
-    ) {
-        return first.equals(second);
+    public double divide(Quantity<U> q1, Quantity<U> q2) {
+        return q1.divide(q2);
     }
 }
