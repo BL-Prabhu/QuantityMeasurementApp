@@ -3,7 +3,8 @@ package model;
 public enum LengthUnit implements IMeasurable {
 
     FEET(1.0),
-    INCHES(1.0 / 12.0);
+    INCHES(1.0 / 12.0),
+    YARDS(3.0);
 
     private final double factor;
 
@@ -24,11 +25,5 @@ public enum LengthUnit implements IMeasurable {
     @Override
     public double convertFromBaseUnit(double baseValue) {
         return baseValue / factor;
-    }
-
-    @Override
-    public String getUnitName() {
-        return name();
-
     }
 }
