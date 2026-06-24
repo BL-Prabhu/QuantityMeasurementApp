@@ -1,35 +1,34 @@
 package controller;
 
 
+import model.LengthUnit;
 import model.Quantity;
-import model.VolumeUnit;
 import service.QuantityService;
 import service.QuantityServiceImpl;
 
 public class QuantityController {
 
-    private final QuantityService service =
-            new QuantityServiceImpl();
-
-    public void runVolumeDemo() {
-
-        Quantity<VolumeUnit> litre =
-                new Quantity<>(1.0, VolumeUnit.LITRE);
-
-        Quantity<VolumeUnit> ml =
-                new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
-
-        System.out.println("Equality: " +
-                service.equals(litre, ml));
-
-        System.out.println("Convert: " +
-                service.convert(litre, VolumeUnit.MILLILITRE));
-
-        System.out.println("Add: " +
-                service.add(litre, ml, VolumeUnit.LITRE));
-    }
-
     public static void main(String[] args) {
-        new QuantityController().runVolumeDemo();
+
+        QuantityService<LengthUnit> service =
+                new QuantityServiceImpl<>();
+
+        Quantity<LengthUnit> q1 =
+                new Quantity<>(10.0, LengthUnit.FEET);
+
+        Quantity<LengthUnit> q2 =
+                new Quantity<>(6.0, LengthUnit.INCHES);
+
+        // SUBTRACTION
+        Quantity<LengthUnit> result =
+                service.subtract(q1, q2, LengthUnit.FEET);
+
+        System.out.println("Subtraction Result: " + result.getValue());
+
+        // DIVISION
+        double division =
+                service.divide(q1, q2);
+
+        System.out.println("Division Result: " + division);
     }
 }
