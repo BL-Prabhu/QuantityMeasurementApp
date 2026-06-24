@@ -1,51 +1,30 @@
-# Quantity Measurement System - Use Case 11 (Volume)
+# Quantity Measurement - Use Case 12
 
-## 📌 Overview
-This project implements a generic measurement system supporting:
+## Features
+- Subtraction of quantities
+- Division of quantities
+- Unit conversion handled internally
+- Generic design using interfaces
 
-- Volume Conversion
-- Equality Comparison
-- Addition of quantities
-
-Using a scalable generic design.
-
----
-
-## ⚙️ Supported Units
-
-| Unit        | Conversion |
-|------------|-----------|
-| LITRE       | Base Unit |
-| MILLILITRE  | 0.001 L   |
-| GALLON      | 3.78541 L |
-
----
-
-## 🧱 Architecture
-
-- Model → Core logic (Quantity, Units)
-- Service → Business operations
+## Architecture
+- Model → Core logic
+- Service → Business logic
 - Controller → Execution layer
-- Test → JUnit validation
+- Test → Unit testing
 
----
+## Examples
 
-## 🚀 Features
+### Subtraction
+10 feet - 6 inches = 9.5 feet
 
-✅ Generic Quantity class  
-✅ Cross-unit conversion  
-✅ Equality using base unit  
-✅ Addition with target unit  
-✅ Cross-category safety
+### Division
+10 feet / 2 feet = 5
 
----
+## Validations
+- Null checks
+- Cross-unit safety
+- Division by zero handling
 
-## 🧪 Example
-
-```java
-Quantity<VolumeUnit> litre = new Quantity<>(1, LITRE);
-Quantity<VolumeUnit> ml = new Quantity<>(1000, MILLILITRE);
-
-litre.equals(ml); // true
-litre.convertTo(MILLILITRE); // 1000
-litre.add(ml); // 2 litres
+## How to Run
+1. Run `QuantityController`
+2. Run tests using JUnit
