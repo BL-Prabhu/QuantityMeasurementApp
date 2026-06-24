@@ -1,24 +1,23 @@
-package quantitymeasurement;
+package app;
 
-import model.LengthUnit;
-import model.Quantity;
+import controller.QuantityMeasurementController;
+import dto.QuantityDTO;
+import repository.QuantityMeasurementCacheRepository;
+import service.QuantityMeasurementServiceImpl;
 
 public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        Quantity<LengthUnit> q1 = new Quantity<>(10, LengthUnit.FEET);
-        Quantity<LengthUnit> q2 = new Quantity<>(6, LengthUnit.INCHES);
+        var repository = QuantityMeasurementCacheRepository.getInstance();
+        var service = new QuantityMeasurementServiceImpl(repository);
+        var controller = new QuantityMeasurementController(service);
 
-        // Subtraction
-        Quantity<LengthUnit> result =
-                q1.subtract(q2, LengthUnit.FEET);
+        QuantityDTO q1 = new QuantityDTO(1, "FEET", "LENGTH");
+        QuantityDTO q2 = new QuantityDTO(12, "INCHES", "LENGTH");
 
-        System.out.println("Subtraction: " + result.getValue() + " FEET");
-
-        // Division
-        double division = q1.divide(q2);
-
-        System.out.println("Division: " + division);
+        controller.performAdd(q1, q2);
+        controller.performSubtract(q1, q2);
+        controller.performCompare(q1, q2);
     }
 }

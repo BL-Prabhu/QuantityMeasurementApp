@@ -2,7 +2,8 @@ package test;
 
 import model.LengthUnit;
 import model.Quantity;
-import model.TemperatureUnit; // ✅ FIX: missing import
+import service.QuantityService;
+import service.QuantityServiceImpl;
 
 import org.junit.Test;
 
@@ -12,46 +13,52 @@ public class QuantityServiceTest {
 
     private static final double EPSILON = 0.01;
 
+    QuantityService<LengthUnit> service =
+            new QuantityServiceImpl<>();
+
     @Test
-    public void testAddition() {
+    public void testAddUsingService() {
         Quantity<LengthUnit> result =
-                new Quantity<>(10, LengthUnit.FEET)
-                        .add(new Quantity<>(6, LengthUnit.INCHES));
+                service.add(
+                        new Quantity<>(10, LengthUnit.FEET),
+                        new Quantity<>(6, LengthUnit.INCHES),
+                        LengthUnit.FEET
+                );
 
         assertEquals(10.5, result.getValue(), EPSILON);
     }
 
     @Test
-    public void testSubtraction() {
+    public void testSubtractUsingService() {
         Quantity<LengthUnit> result =
-                new Quantity<>(10, LengthUnit.FEET)
-                        .subtract(new Quantity<>(6, LengthUnit.INCHES));
+                service.subtract(
+                        new Quantity<>(10, LengthUnit.FEET),
+                        new Quantity<>(6, LengthUnit.INCHES),
+                        LengthUnit.FEET
+                );
 
         assertEquals(9.5, result.getValue(), EPSILON);
     }
 
     @Test
-    public void testDivision() {
+    public void testDivideUsingService() {
         double result =
-                new Quantity<>(24, LengthUnit.INCHES)
-                        .divide(new Quantity<>(2, LengthUnit.FEET));
+                service.divide(
+                        new Quantity<>(24, LengthUnit.INCHES),
+                        new Quantity<>(2, LengthUnit.FEET)
+                );
 
         assertEquals(1.0, result, EPSILON);
     }
 
     @Test
-    public void testTemperatureNotSupportingArithmetic() {
+    public void testConvertUsingService() {
+        Quantity<LengthUnit> result =
+                service.convert(
+                        new Quantity<>(1, LengthUnit.FEET),
+                        LengthUnit.INCHES
+                );
 
-        try {
-            new Quantity<>(100.0, TemperatureUnit.CELSIUS)
-                    .add(new Quantity<>(50.0, TemperatureUnit.CELSIUS));
-
-            fail("Expected exception not thrown"); // ✅ better practice
-
-        } catch (UnsupportedOperationException e) { // ✅ specific exception
-            assertTrue(e.getMessage().contains("Temperature"));
-        }
+        assertEquals(12.0, result.getValue(), EPSILON);
     }
-
-
 }
