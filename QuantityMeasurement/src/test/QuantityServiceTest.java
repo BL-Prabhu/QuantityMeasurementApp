@@ -2,44 +2,56 @@ package test;
 
 import model.LengthUnit;
 import model.Quantity;
-import service.QuantityService;
-import service.QuantityServiceImpl;
+import model.TemperatureUnit; // ✅ FIX: missing import
+
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class QuantityServiceTest {
 
-    private final QuantityService service =
-            new QuantityServiceImpl();
+    private static final double EPSILON = 0.01;
 
     @Test
-    public void testComparisonEqual() {
+    public void testAddition() {
+        Quantity<LengthUnit> result =
+                new Quantity<>(10, LengthUnit.FEET)
+                        .add(new Quantity<>(6, LengthUnit.INCHES));
 
-        Quantity<LengthUnit> q1 =
-                new Quantity<>(1, LengthUnit.FEET);
-
-        Quantity<LengthUnit> q2 =
-                new Quantity<>(12, LengthUnit.INCHES);
-
-        assertEquals(0, service.compare(q1, q2));
+        assertEquals(10.5, result.getValue(), EPSILON);
     }
 
     @Test
-    public void testSorting() {
+    public void testSubtraction() {
+        Quantity<LengthUnit> result =
+                new Quantity<>(10, LengthUnit.FEET)
+                        .subtract(new Quantity<>(6, LengthUnit.INCHES));
 
-        List<Quantity<LengthUnit>> list = Arrays.asList(
-                new Quantity<>(3, LengthUnit.FEET),
-                new Quantity<>(24, LengthUnit.INCHES),
-                new Quantity<>(1, LengthUnit.YARDS)
-        );
-
-        List<Quantity<LengthUnit>> sorted = service.sort(list);
-
-        assertTrue(sorted.get(0).compareTo(sorted.get(1)) <= 0);
+        assertEquals(9.5, result.getValue(), EPSILON);
     }
+
+    @Test
+    public void testDivision() {
+        double result =
+                new Quantity<>(24, LengthUnit.INCHES)
+                        .divide(new Quantity<>(2, LengthUnit.FEET));
+
+        assertEquals(1.0, result, EPSILON);
+    }
+
+    @Test
+    public void testTemperatureNotSupportingArithmetic() {
+
+        try {
+            new Quantity<>(100.0, TemperatureUnit.CELSIUS)
+                    .add(new Quantity<>(50.0, TemperatureUnit.CELSIUS));
+
+            fail("Expected exception not thrown"); // ✅ better practice
+
+        } catch (UnsupportedOperationException e) { // ✅ specific exception
+            assertTrue(e.getMessage().contains("Temperature"));
+        }
+    }
+
+
 }
