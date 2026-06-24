@@ -1,16 +1,23 @@
 package quantitymeasurement;
 
-import controller.MeasurementController;
+import model.LengthUnit;
+import model.Quantity;
 
 public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        MeasurementController controller = new MeasurementController();
+        Quantity<LengthUnit> q1 = new Quantity<>(10, LengthUnit.FEET);
+        Quantity<LengthUnit> q2 = new Quantity<>(6, LengthUnit.INCHES);
 
-        controller.compareInches(1.0, 1.0);
-        System.out.println();
+// Subtraction
+        System.out.println(
+                "Subtraction: " + q1.subtract(q2, LengthUnit.FEET).getValue()
+        );
 
-        controller.compareFeet(1.0, 1.0);
+// Division
+        System.out.println(
+                "Division: " + q1.divide(q2)
+        );
     }
 }
