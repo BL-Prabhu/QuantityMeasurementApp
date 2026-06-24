@@ -2,7 +2,7 @@ package model;
 
 public interface IMeasurable {
 
-    double getConversionFactor();
+    double getConversionFactor();   // ✅ ADD THIS
 
     double convertToBaseUnit(double value);
 
