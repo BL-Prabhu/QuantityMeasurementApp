@@ -3,15 +3,29 @@ package service;
 import model.IMeasurable;
 import model.Quantity;
 
-public class QuantityServiceImpl<U extends IMeasurable> implements QuantityService<U> {
+import java.util.Collections;
+import java.util.List;
+
+public class QuantityServiceImpl implements QuantityService {
 
     @Override
-    public Quantity<U> subtract(Quantity<U> q1, Quantity<U> q2, U unit) {
-        return q1.subtract(q2, unit);
+    public <U extends IMeasurable> int compare(
+            Quantity<U> q1,
+            Quantity<U> q2
+    ) {
+        return q1.compareTo(q2);
     }
 
     @Override
-    public double divide(Quantity<U> q1, Quantity<U> q2) {
-        return q1.divide(q2);
+    public <U extends IMeasurable> List<Quantity<U>> sort(
+            List<Quantity<U>> quantities
+    ) {
+
+        if (quantities == null) {
+            throw new IllegalArgumentException("List cannot be null");
+        }
+
+        Collections.sort(quantities);
+        return quantities;
     }
 }
