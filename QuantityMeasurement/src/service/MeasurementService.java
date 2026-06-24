@@ -1,5 +1,8 @@
 package service;
 
+import model.Feet;
+import model.Inches;
+
 public class MeasurementService {
 
     public boolean compareFeet(Feet f1, Feet f2) {
