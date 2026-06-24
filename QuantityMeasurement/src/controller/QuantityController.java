@@ -1,34 +1,44 @@
 package controller;
 
-
 import model.LengthUnit;
 import model.Quantity;
 import service.QuantityService;
 import service.QuantityServiceImpl;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class QuantityController {
 
     public static void main(String[] args) {
 
-        QuantityService<LengthUnit> service =
-                new QuantityServiceImpl<>();
+        QuantityService service = new QuantityServiceImpl();
 
         Quantity<LengthUnit> q1 =
-                new Quantity<>(10.0, LengthUnit.FEET);
+                new Quantity<>(1.0, LengthUnit.FEET);
 
         Quantity<LengthUnit> q2 =
-                new Quantity<>(6.0, LengthUnit.INCHES);
+                new Quantity<>(12.0, LengthUnit.INCHES);
 
-        // SUBTRACTION
-        Quantity<LengthUnit> result =
-                service.subtract(q1, q2, LengthUnit.FEET);
+        // ✅ Comparison
+        int result = service.compare(q1, q2);
 
-        System.out.println("Subtraction Result: " + result.getValue());
+        System.out.println("Comparison Result: " + result);
 
-        // DIVISION
-        double division =
-                service.divide(q1, q2);
+        // ✅ Sorting
+        List<Quantity<LengthUnit>> list = Arrays.asList(
+                new Quantity<>(3.0, LengthUnit.FEET),
+                new Quantity<>(24.0, LengthUnit.INCHES),
+                new Quantity<>(1.0, LengthUnit.YARDS)
+        );
 
-        System.out.println("Division Result: " + division);
+        List<Quantity<LengthUnit>> sorted = service.sort(list);
+
+        System.out.println("\nSorted Quantities (Base Unit - FEET):");
+
+        sorted.forEach(q -> {
+            double base = q.getUnit().convertToBaseUnit(q.getValue());
+            System.out.println(base + " FEET");
+        });
     }
 }
