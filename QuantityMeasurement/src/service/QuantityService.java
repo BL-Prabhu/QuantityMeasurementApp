@@ -3,16 +3,13 @@ package service;
 import model.IMeasurable;
 import model.Quantity;
 
-import java.util.List;
+public interface QuantityService<U extends IMeasurable> {
 
-public interface QuantityService {
+    Quantity<U> add(Quantity<U> q1, Quantity<U> q2, U targetUnit);
 
-    <U extends IMeasurable> int compare(
-            Quantity<U> q1,
-            Quantity<U> q2
-    );
+    Quantity<U> subtract(Quantity<U> q1, Quantity<U> q2, U targetUnit);
 
-    <U extends IMeasurable> List<Quantity<U>> sort(
-            List<Quantity<U>> quantities
-    );
+    double divide(Quantity<U> q1, Quantity<U> q2);
+
+    Quantity<U> convert(Quantity<U> quantity, U targetUnit);
 }
