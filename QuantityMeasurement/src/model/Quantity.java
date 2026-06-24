@@ -1,16 +1,12 @@
 package model;
 
-public class Quantity<U extends IMeasurable> {
-
-    private static final double EPSILON = 0.0001;
+public class Quantity<U extends IMeasurable>
+        implements Comparable<Quantity<U>> {
 
     private final double value;
     private final U unit;
 
     public Quantity(double value, U unit) {
-        if (!Double.isFinite(value)) {
-            throw new IllegalArgumentException("Invalid value");
-        }
         if (unit == null) {
             throw new IllegalArgumentException("Unit cannot be null");
         }
@@ -26,53 +22,68 @@ public class Quantity<U extends IMeasurable> {
         return unit;
     }
 
-    // 🔹 SUBTRACTION
-    public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
+    // 🔹 Comparison logic
+    @Override
+    public int compareTo(Quantity<U> other) {
 
-        validate(other, targetUnit);
+        if (other == null) {
+            throw new IllegalArgumentException("Cannot compare with null");
+        }
 
-        double result =
-                unit.convertToBaseUnit(value)
-                        - other.unit.convertToBaseUnit(other.value);
+        if (!unit.getClass().equals(other.unit.getClass())) {
+            throw new IllegalArgumentException("Cross-category comparison not allowed");
+        }
 
-        double converted =
-                targetUnit.convertFromBaseUnit(result);
+        double thisBase = unit.convertToBaseUnit(value);
+        double otherBase = other.unit.convertToBaseUnit(other.value);
 
-        return new Quantity<>(round(converted), targetUnit);
+        return Double.compare(thisBase, otherBase);
     }
 
-    // 🔹 DIVISION
+    @Override
+    public String toString() {
+        return value + " " + unit;
+    }
+
+    // 🔹 Subtraction
+    public Quantity<U> subtract(Quantity<U> other, U resultUnit) {
+
+        if (other == null) {
+            throw new IllegalArgumentException("Cannot subtract null");
+        }
+
+        if (!unit.getClass().equals(other.unit.getClass())) {
+            throw new IllegalArgumentException("Cross-category not allowed");
+        }
+
+        double thisBase = unit.convertToBaseUnit(value);
+        double otherBase = other.unit.convertToBaseUnit(other.value);
+
+        double resultBase = thisBase - otherBase;
+
+        double finalValue = resultUnit.convertFromBaseUnit(resultBase);
+
+        return new Quantity<>(finalValue, resultUnit);
+    }
+
+    // 🔹 Division
     public double divide(Quantity<U> other) {
 
         if (other == null) {
-            throw new IllegalArgumentException("Operand cannot be null");
+            throw new IllegalArgumentException("Cannot divide by null");
         }
 
-        double divisor =
-                other.unit.convertToBaseUnit(other.value);
+        if (!unit.getClass().equals(other.unit.getClass())) {
+            throw new IllegalArgumentException("Cross-category not allowed");
+        }
 
-        if (Math.abs(divisor) < EPSILON) {
+        double thisBase = unit.convertToBaseUnit(value);
+        double otherBase = other.unit.convertToBaseUnit(other.value);
+
+        if (otherBase == 0) {
             throw new ArithmeticException("Division by zero");
         }
 
-        double dividend =
-                unit.convertToBaseUnit(value);
-
-        return dividend / divisor;
-    }
-
-    private void validate(Quantity<U> other, U targetUnit) {
-
-        if (other == null) {
-            throw new IllegalArgumentException("Operand cannot be null");
-        }
-
-        if (targetUnit == null) {
-            throw new IllegalArgumentException("Target unit cannot be null");
-        }
-    }
-
-    private double round(double value) {
-        return Math.round(value * 100.0) / 100.0;
+        return thisBase / otherBase;
     }
 }
