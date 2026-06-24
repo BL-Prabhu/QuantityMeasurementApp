@@ -1,8 +1,5 @@
 package service;
 
-import model.IMeasurable;
-import model.Quantity;
-
 public class QuantityServiceImpl<U extends IMeasurable>
         implements QuantityService<U> {
 

@@ -1,8 +1,5 @@
 package service;
 
-import model.IMeasurable;
-import model.Quantity;
-
 public interface QuantityService<U extends IMeasurable> {
 
     Quantity<U> add(Quantity<U> q1, Quantity<U> q2, U targetUnit);
