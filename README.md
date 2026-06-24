@@ -1,30 +1,43 @@
-# Quantity Measurement - Use Case 12
+# Quantity Measurement System - Use Case 13
 
-## Features
-- Subtraction of quantities
-- Division of quantities
-- Unit conversion handled internally
-- Generic design using interfaces
+## 📌 Overview
+This use case adds comparison and sorting capabilities to the quantity system.
 
-## Architecture
-- Model → Core logic
-- Service → Business logic
-- Controller → Execution layer
-- Test → Unit testing
+---
 
-## Examples
+## 🚀 Features
 
-### Subtraction
-10 feet - 6 inches = 9.5 feet
+- Compare two quantities
+- Sort list of quantities
+- Automatic unit conversion during comparison
+- Type safety using generics
 
-### Division
-10 feet / 2 feet = 5
+---
 
-## Validations
-- Null checks
-- Cross-unit safety
-- Division by zero handling
+## ⚙️ Example
 
-## How to Run
-1. Run `QuantityController`
-2. Run tests using JUnit
+### Comparison
+1 ft == 12 inches → true
+
+### Sorting
+Input:
+3 ft, 24 inches, 1 yard
+
+Output:
+2 ft, 3 ft, 3 ft
+
+---
+
+## 🧱 Architecture
+
+- Model → Quantity + Units
+- Service → Comparison logic
+- Controller → Execution
+- Test → JUnit validation
+
+---
+
+## ▶️ Run
+
+```bash
+java QuantityController
