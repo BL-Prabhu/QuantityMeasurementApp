@@ -4,7 +4,7 @@ public class QuantityDTO {
 
     private double value;
     private String unit;
-    private String type; // LENGTH, WEIGHT, VOLUME, TEMPERATURE
+    private String type;
 
     public QuantityDTO(double value, String unit, String type) {
         this.value = value;

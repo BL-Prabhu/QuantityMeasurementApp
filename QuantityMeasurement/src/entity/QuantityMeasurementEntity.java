@@ -1,36 +1,26 @@
 package entity;
 
-import java.io.Serializable;
+public class QuantityMeasurementEntity {
 
-public class QuantityMeasurementEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private String operation;
-    private String result;
+    private boolean result;
     private boolean error;
-    private String errorMessage;
+    private String message;
 
-    public QuantityMeasurementEntity(String operation, String result) {
-        this.operation = operation;
+    public QuantityMeasurementEntity(boolean result, boolean error, String message) {
         this.result = result;
-        this.error = false;
+        this.error = error;
+        this.message = message;
     }
 
-    public QuantityMeasurementEntity(String errorMessage) {
-        this.error = true;
-        this.errorMessage = errorMessage;
+    public boolean getResult() {
+        return result;
     }
 
     public boolean hasError() {
         return error;
     }
 
-    @Override
-    public String toString() {
-        if (error) {
-            return "Error: " + errorMessage;
-        }
-        return operation + " => " + result;
+    public String getMessage() {
+        return message;
     }
 }
