@@ -21,8 +21,9 @@ public class QuantityServiceImpl<U extends IMeasurable>
         return q1.divide(q2);
     }
 
+
     @Override
     public Quantity<U> convert(Quantity<U> quantity, U targetUnit) {
-        return quantity.convertTo(targetUnit);
+        return quantity.to(targetUnit); // ✅ use to() not convertTo()
     }
 }

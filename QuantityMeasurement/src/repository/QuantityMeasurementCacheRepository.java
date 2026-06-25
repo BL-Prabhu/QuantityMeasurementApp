@@ -8,26 +8,24 @@ import java.util.List;
 public class QuantityMeasurementCacheRepository
         implements IQuantityMeasurementRepository {
 
-    private static QuantityMeasurementCacheRepository instance;
+    private static final QuantityMeasurementCacheRepository INSTANCE =
+            new QuantityMeasurementCacheRepository();
 
-    private final List<QuantityMeasurementEntity> cache = new ArrayList<>();
+    private final List<QuantityMeasurementEntity> store =
+            new ArrayList<>();
 
     private QuantityMeasurementCacheRepository() {}
 
     public static QuantityMeasurementCacheRepository getInstance() {
-        if (instance == null) {
-            instance = new QuantityMeasurementCacheRepository();
-        }
-        return instance;
+        return INSTANCE;
     }
 
     @Override
     public void save(QuantityMeasurementEntity entity) {
-        cache.add(entity);
+        store.add(entity);
     }
 
-    @Override
     public List<QuantityMeasurementEntity> findAll() {
-        return cache;
+        return store;
     }
 }

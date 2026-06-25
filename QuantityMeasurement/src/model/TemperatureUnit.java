@@ -7,7 +7,7 @@ public enum TemperatureUnit implements IMeasurable {
 
     @Override
     public double getConversionFactor() {
-        return 1; // Not used
+        return 1;
     }
 
     @Override
@@ -29,5 +29,10 @@ public enum TemperatureUnit implements IMeasurable {
     @Override
     public String getUnitName() {
         return name();
+    }
+
+    @Override
+    public boolean supportsArithmetic() {
+        return false; // ❌ Temperature cannot be added/subtracted
     }
 }

@@ -1,9 +1,13 @@
 package model;
 
+import java.util.Objects;
+
 public class Quantity<U extends IMeasurable> {
 
-    private double value;
-    private U unit;
+    private final double value;
+    private final U unit;
+
+    private static final double EPSILON = 0.0001;
 
     public Quantity(double value, U unit) {
         this.value = value;
@@ -18,84 +22,75 @@ public class Quantity<U extends IMeasurable> {
         return unit;
     }
 
-    private void validateArithmetic(Quantity<U> other) {
-
-        if (!unit.getClass().equals(other.unit.getClass())) {
-            throw new IllegalArgumentException("Incompatible units");
-        }
-
-        // ❗ BLOCK TEMPERATURE
-        if (unit.getClass().getSimpleName().equals("TemperatureUnit")) {
-            throw new UnsupportedOperationException("Temperature arithmetic not supported");
-        }
+    // 🔹 Convert to base
+    private double toBase() {
+        return unit.convertToBaseUnit(value);
     }
 
+    // 🔹 Convert to target unit
+    public double convertTo(U targetUnit) {
+        double baseValue = unit.convertToBaseUnit(this.value);
+        return targetUnit.convertFromBaseUnit(baseValue);
+    }
+    public Quantity<U> to(U targetUnit) {
+        double baseValue = unit.convertToBaseUnit(this.value);
+        double convertedValue = targetUnit.convertFromBaseUnit(baseValue);
+        return new Quantity<>(convertedValue, targetUnit);
+    }
+
+    // ✅ ADD (same unit return)
+    public Quantity<U> add(Quantity<U> other) {
+        unit.validateOperationSupport("Addition");
+
+        double resultBase = this.toBase() + other.toBase();
+        double result = unit.convertFromBaseUnit(resultBase);
+
+        return new Quantity<>(result, unit);
+    }
+
+    // ✅ ADD (target unit)
     public Quantity<U> add(Quantity<U> other, U targetUnit) {
+        unit.validateOperationSupport("Addition");
 
-        validateArithmetic(other);
+        double resultBase = this.toBase() + other.toBase();
+        double result = targetUnit.convertFromBaseUnit(resultBase);
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        double resultBase = base1 + base2;
-
-        double finalValue = targetUnit.convertFromBaseUnit(resultBase);
-
-        return new Quantity<>(finalValue, targetUnit);
+        return new Quantity<>(result, targetUnit);
     }
 
+    // ✅ SUBTRACT
     public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
+        unit.validateOperationSupport("Subtraction");
 
-        validateArithmetic(other);
+        double resultBase = this.toBase() - other.toBase();
+        double result = targetUnit.convertFromBaseUnit(resultBase);
 
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        double resultBase = base1 - base2;
-
-        double finalValue = targetUnit.convertFromBaseUnit(resultBase);
-
-        return new Quantity<>(finalValue, targetUnit);
+        return new Quantity<>(result, targetUnit);
     }
 
+    // ✅ DIVIDE
     public double divide(Quantity<U> other) {
+        unit.validateOperationSupport("Division");
 
-        validateArithmetic(other);
-
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        return base1 / base2;
+        return this.toBase() / other.toBase();
     }
 
-    public Quantity<U> convertTo(U targetUnit) {
+    // ✅ EQUALS (IMPORTANT)
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Quantity<?> other)) return false;
 
-        double baseValue = unit.convertToBaseUnit(value);
-        double converted = targetUnit.convertFromBaseUnit(baseValue);
-
-        return new Quantity<>(converted, targetUnit);
+        return Math.abs(this.toBase() - other.toBase()) < EPSILON;
     }
 
     @Override
-    public boolean equals(Object obj) {
-
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        Quantity<?> other = (Quantity<?>) obj;
-
-        double base1 = unit.convertToBaseUnit(value);
-        double base2 = other.unit.convertToBaseUnit(other.value);
-
-        return Math.abs(base1 - base2) < 0.01;
+    public int hashCode() {
+        return Objects.hash(toBase());
     }
 
-    public Quantity<U> add(Quantity<U> other) {
-        return add(other, this.unit);
-    }
-
-    public Quantity<U> subtract(Quantity<U> other) {
-        return subtract(other, this.unit);
+    @Override
+    public String toString() {
+        return value + " " + unit.getUnitName();
     }
 }

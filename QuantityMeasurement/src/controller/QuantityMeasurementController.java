@@ -12,16 +12,14 @@ public class QuantityMeasurementController {
         this.service = service;
     }
 
-    public void performAdd(QuantityDTO q1, QuantityDTO q2) {
-        QuantityMeasurementEntity result = service.add(q1, q2);
-        System.out.println(result);
-    }
+    public void performComparison(QuantityDTO q1, QuantityDTO q2) {
 
-    public void performSubtract(QuantityDTO q1, QuantityDTO q2) {
-        System.out.println(service.subtract(q1, q2));
-    }
+        QuantityMeasurementEntity result = service.compare(q1, q2);
 
-    public void performCompare(QuantityDTO q1, QuantityDTO q2) {
-        System.out.println(service.compare(q1, q2));
+        if (result.hasError()) {
+            System.out.println("❌ Error: " + result.getMessage());
+        } else {
+            System.out.println("✅ Result: " + result.getResult());
+        }
     }
 }
