@@ -1,18 +1,25 @@
 package controller;
 
-public class QuantityController {
+import dto.QuantityDTO;
+import entity.QuantityMeasurementEntity;
+import service.IQuantityMeasurementService;
 
-    private double value;
-    private String unit;
-    private String type; // LENGTH, WEIGHT, VOLUME, TEMPERATURE
+public class QuantityMeasurementController {
 
-    public QuantityController(double value, String unit, String type) {
-        this.value = value;
-        this.unit = unit;
-        this.type = type;
+    private final IQuantityMeasurementService service;
+
+    public QuantityMeasurementController(IQuantityMeasurementService service) {
+        this.service = service;
     }
 
-    public double getValue() { return value; }
-    public String getUnit() { return unit; }
-    public String getType() { return type; }
+    public void performComparison(QuantityDTO q1, QuantityDTO q2) {
+
+        QuantityMeasurementEntity result = service.compare(q1, q2);
+
+        if (result.hasError()) {
+            System.out.println("❌ Error: " + result.getMessage());
+        } else {
+            System.out.println("✅ Result: " + result.getResult());
+        }
+    }
 }
