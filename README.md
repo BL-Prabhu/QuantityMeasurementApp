@@ -1,43 +1,111 @@
-# Quantity Measurement System - Use Case 13
+# Use Case 15: Quantity Conversion Feature
 
 ## 📌 Overview
-This use case adds comparison and sorting capabilities to the quantity system.
+
+This use case implements the **Quantity Conversion Feature**, which allows users to convert values from one unit to another (e.g., meters to kilometers, grams to kilograms).
+
+The system ensures accurate conversion using predefined conversion factors and supports multiple unit types.
 
 ---
 
-## 🚀 Features
+## 🎯 Objectives
 
-- Compare two quantities
-- Sort list of quantities
-- Automatic unit conversion during comparison
-- Type safety using generics
-
----
-
-## ⚙️ Example
-
-### Comparison
-1 ft == 12 inches → true
-
-### Sorting
-Input:
-3 ft, 24 inches, 1 yard
-
-Output:
-2 ft, 3 ft, 3 ft
+* Convert quantities between different units
+* Ensure type-safe and accurate conversions
+* Provide reusable and scalable conversion logic
 
 ---
 
-## 🧱 Architecture
+## 🛠️ Technologies Used
 
-- Model → Quantity + Units
-- Service → Comparison logic
-- Controller → Execution
-- Test → JUnit validation
+* Java
+* Spring Boot
+* REST API
+* Maven
 
 ---
 
-## ▶️ Run
+## 📂 Project Structure
 
-```bash
-java QuantityController
+* `model` → Contains `Quantity` class
+* `service` → Business logic for conversion
+* `controller` → API endpoints
+* `exception` → Custom error handling
+
+---
+
+## ⚙️ Functionality
+
+### 1. Create Quantity
+
+* User provides value and unit
+* Example: `10 meters`
+
+### 2. Convert Quantity
+
+* Convert from one unit to another
+* Example: `meters → kilometers`
+
+### 3. Supported Units
+
+* Length → meter, kilometer, centimeter
+* Weight → gram, kilogram
+* (Extendable for more units)
+
+---
+
+## 🔁 Sample API
+
+### Convert Quantity API
+
+**POST** `/api/quantity/convert`
+
+#### Request Body:
+
+```json
+{
+  "value": 1000,
+  "fromUnit": "meter",
+  "toUnit": "kilometer"
+}
+```
+
+#### Response:
+
+```json
+{
+  "convertedValue": 1,
+  "unit": "kilometer"
+}
+```
+
+---
+
+## ❗ Error Handling
+
+* Invalid unit → returns error message
+* Unsupported conversion → handled gracefully
+* Null or negative values → validation error
+
+---
+
+## 🔐 Validation Rules
+
+* Value must be positive
+* Units must belong to the same category
+* Conversion must be supported
+
+---
+
+## 🚀 Future Enhancements
+
+* Add temperature conversion
+* Add currency conversion
+* Support dynamic unit configuration
+* Integrate with database
+
+---
+
+## ✅ Conclusion
+
+This use case demonstrates a clean and scalable way to implement **unit conversion logic** using Java and Spring Boot, making it easy to extend for additional unit types in the future.
