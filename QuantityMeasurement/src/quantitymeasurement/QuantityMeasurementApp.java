@@ -1,23 +1,33 @@
-package app;
+package quantitymeasurement;
 
 import controller.QuantityMeasurementController;
 import dto.QuantityDTO;
-import repository.QuantityMeasurementCacheRepository;
+import repository.IQuantityMeasurementRepository;
+import repository.QuantityMeasurementDatabaseRepository;
+import service.IQuantityMeasurementService;
 import service.QuantityMeasurementServiceImpl;
+import util.DatabaseInitializer;
 
 public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        var repository = QuantityMeasurementCacheRepository.getInstance();
-        var service = new QuantityMeasurementServiceImpl(repository);
-        var controller = new QuantityMeasurementController(service);
+        // ✅ Init DB
+        DatabaseInitializer.init();
 
-        QuantityDTO q1 = new QuantityDTO(1, "FEET", "LENGTH");
-        QuantityDTO q2 = new QuantityDTO(12, "INCHES", "LENGTH");
+        IQuantityMeasurementRepository repo =
+                new QuantityMeasurementDatabaseRepository();
 
-        controller.performAdd(q1, q2);
-        controller.performSubtract(q1, q2);
-        controller.performCompare(q1, q2);
+        IQuantityMeasurementService service =
+                new QuantityMeasurementServiceImpl(repo); // ✅ FIXED
+
+        QuantityMeasurementController controller =
+                new QuantityMeasurementController(service);
+
+        // ✅ USE CASE 16
+        controller.performComparison(
+                new QuantityDTO(1, "FEET", "LENGTH"),
+                new QuantityDTO(12, "INCHES", "LENGTH") // ✅ MUST match enum
+        );
     }
 }
