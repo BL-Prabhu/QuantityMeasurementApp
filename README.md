@@ -115,7 +115,6 @@ This use case demonstrates a clean and scalable way to implement **unit conversi
 
 ## Use Case 16 – Save Data to Database (H2)
 
-
 ### 📌 Overview
 
 In this use case, we implemented functionality to **store quantity measurement results into an H2 database**. This helps in persisting comparison results or calculation outcomes for future reference.
