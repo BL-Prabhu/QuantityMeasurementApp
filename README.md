@@ -1,256 +1,160 @@
- feature/UC15-N-Tier-Architectures-Refactor
-# Use Case 15: Quantity Conversion Feature
+# 📘 Use Case 17: Get Operation Count
 
-## 📌 Overview
+## 🧾 Description
 
-This use case implements the **Quantity Conversion Feature**, which allows users to convert values from one unit to another (e.g., meters to kilometers, grams to kilograms).
+This use case allows users to retrieve the **total number of times a specific operation** (e.g., compare, add) has been performed in the system.
 
-The system ensures accurate conversion using predefined conversion factors and supports multiple unit types.
-
----
-
-## 🎯 Objectives
-
-* Convert quantities between different units
-* Ensure type-safe and accurate conversions
-* Provide reusable and scalable conversion logic
+It helps in tracking usage statistics and understanding how frequently certain operations are executed.
 
 ---
 
-## 🛠️ Technologies Used
+## 🎯 Objective
 
-* Java
-* Spring Boot
-* REST API
-* Maven
+To provide a simple API that returns the count of a given operation performed by users.
 
 ---
 
-## 📂 Project Structure
+## 📥 Input
 
-* `model` → Contains `Quantity` class
-* `service` → Business logic for conversion
-* `controller` → API endpoints
-* `exception` → Custom error handling
+* **Operation Name** (Path Variable)
 
----
+   * Type: `String`
+   * Example:
 
-## ⚙️ Functionality
-
-### 1. Create Quantity
-
-* User provides value and unit
-* Example: `10 meters`
-
-### 2. Convert Quantity
-
-* Convert from one unit to another
-* Example: `meters → kilometers`
-
-### 3. Supported Units
-
-* Length → meter, kilometer, centimeter
-* Weight → gram, kilogram
-* (Extendable for more units)
+     ```
+     COMPARE
+     ADD
+     ```
 
 ---
 
-## 🔁 Sample API
+## 📤 Output
 
-### Convert Quantity API
+* Returns the total count of the requested operation.
 
-**POST** `/api/quantity/convert`
+### Example Response:
 
-#### Request Body:
-
-```json
-{
-  "value": 1000,
-  "fromUnit": "meter",
-  "toUnit": "kilometer"
-}
 ```
-
-#### Response:
-
-```json
-{
-  "convertedValue": 1,
-  "unit": "kilometer"
-}
+5
 ```
 
 ---
 
-## ❗ Error Handling
+## 🔗 API Endpoint
 
-* Invalid unit → returns error message
-* Unsupported conversion → handled gracefully
-* Null or negative values → validation error
-
----
-
-## 🔐 Validation Rules
-
-* Value must be positive
-* Units must belong to the same category
-* Conversion must be supported
-
----
-
-## 🚀 Future Enhancements
-
-* Add temperature conversion
-* Add currency conversion
-* Support dynamic unit configuration
-* Integrate with database
-
----
-
-## ✅ Conclusion
-
-This use case demonstrates a clean and scalable way to implement **unit conversion logic** using Java and Spring Boot, making it easy to extend for additional unit types in the future.
-=======
-# Quantity Measurement Application
-
-## Use Case 16 – Save Data to Database (H2)
-
-### 📌 Overview
-
-In this use case, we implemented functionality to **store quantity measurement results into an H2 database**. This helps in persisting comparison results or calculation outcomes for future reference.
-
----
-
-### 🚀 Features
-
-* Save measurement results into database
-* Store operation type (e.g., COMPARE)
-* Track success or error status
-* Lightweight in-memory database using H2
-* Simple repository-based design
-
----
-
-### 🛠️ Technologies Used
-
-* Java
-* JDBC
-* H2 Database (In-Memory)
-* JUnit (for testing)
-
----
-
-### 📂 Project Structure
+### GET Request
 
 ```
-entity/
- └── QuantityMeasurementEntity.java
+/api/v1/quantities/count/{operation}
+```
 
-repository/
- └── QuantityMeasurementDatabaseRepository.java
+### Example:
 
-test/
- └── QuantityMeasurementDatabaseRepositoryTest.java
+```
+/api/v1/quantities/count/COMPARE
 ```
 
 ---
 
-### 🧱 Entity Class
+## ⚙️ Controller Layer
 
-Represents the data stored in the database.
-
-Fields:
-
-* `boolean result`
-* `boolean hasError`
-* `String message`
-
----
-
-### 💾 Repository Layer
-
-Handles database operations:
-
-* Establish connection with H2
-* Insert data into table
-
----
-
-### 🧪 Test Case
-
-The test verifies that data is successfully saved in the database.
-
-Example:
+The controller exposes the endpoint:
 
 ```java
-QuantityMeasurementEntity entity =
-    new QuantityMeasurementEntity(true, false, "COMPARE");
-
-repo.save(entity);
+@GetMapping("/count/{operation}")
+public ResponseEntity<Long> getOperationCount(@PathVariable String operation) {
+    return ResponseEntity.ok(service.getOperationCount(operation));
+}
 ```
 
 ---
 
-### 🗄️ H2 Database Configuration
+## 🧠 Service Layer
 
-Default URL:
+Handles the business logic:
 
-```
-jdbc:h2:mem:testdb
-```
-
-H2 Console:
-
-```
-http://localhost:8080/h2-console
-```
-
-JDBC URL:
-
-```
-jdbc:h2:mem:testdb
+```java
+@Override
+public Long getOperationCount(String operation) {
+    return repository.countByOperation(operation.toLowerCase());
+}
 ```
 
 ---
 
-### ▶️ How to Run
+## 🗄️ Repository Layer
 
-1. Run the test class:
+Responsible for fetching count from database:
 
-   ```
-   QuantityMeasurementDatabaseRepositoryTest
-   ```
-
-2. Check console output:
-
-   ```
-   Data saved successfully
-   ```
-
-3. (Optional) Open H2 Console and verify table data
+```java
+Long countByOperation(String operation);
+```
 
 ---
 
-### ✅ Expected Output
+## 🧪 Test Case
 
-* Data should be inserted into the database table
-* No runtime errors
-* Console prints success message
+### Test Scenario: Successful Count Fetch
+
+```java
+@Test
+void testGetOperationCount_Success() throws Exception {
+
+    when(service.getOperationCount("COMPARE"))
+            .thenReturn(5L);
+
+    mockMvc.perform(get("/api/v1/quantities/count/COMPARE"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("5"));
+
+    verify(service, times(1))
+            .getOperationCount("COMPARE");
+}
+```
 
 ---
 
-### 📌 Conclusion
+## ✅ Expected Behavior
 
-Use Case 16 demonstrates how to integrate a simple database (H2) with Java to persist application data. This is a foundational step toward building scalable backend systems.
+* Returns HTTP **200 OK**
+* Returns operation count as plain text or JSON number
+* Case-insensitive operation handling (recommended)
+
+---
+
+## ❌ Error Handling
+
+| Scenario          | Response                  |
+| ----------------- | ------------------------- |
+| Invalid operation | 0 or custom error         |
+| Service failure   | 500 Internal Server Error |
 
 ---
 
-### 🔮 Next Improvements
+## 📌 Notes
 
-* Add retrieval (SELECT) functionality
-* Use Spring Boot + JPA
-* Add validation and exception handling
-* Convert to production database (MySQL/PostgreSQL)
+* Operation names should be standardized (e.g., uppercase or lowercase)
+* Useful for analytics and monitoring system usage
+* Can be extended to support date-based filtering
 
 ---
- dev
+
+## 🚀 Example Curl
+
+```bash
+curl -X GET http://localhost:8080/api/v1/quantities/count/COMPARE
+```
+
+---
+
+## 📊 Use Cases
+
+* Track feature usage
+* Monitor system behavior
+* Generate reports and insights
+
+---
+
+## 🏁 Summary
+
+Use Case 17 provides a simple and efficient way to retrieve how many times a specific operation has been executed, enabling better tracking and analytics within the Quantity Measurement system.
